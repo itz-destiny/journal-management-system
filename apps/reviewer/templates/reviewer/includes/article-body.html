@@ -1,34 +1,41 @@
 
     {% load static %}
-    <div class="col-md-3">
-        <a href="{% url 'reviewer:check_user_article' article.pk %}">
-  
-          <div class="card">
-            <div class="card-body">
-  
-              <img src="{% static 'image/document_static.png' %}" style=" width:100%" alt="">
-              <hr>
-              <div class="d-flex flex-column bd-highlight">
-                <div class="p-2 bd-highlight"><strong> Category : </strong>
-                  <div class="badge badge-info">{{article.category}}</div>
+    <div class="col-md-4 col-lg-3 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-light py-2 px-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="badge badge-primary">{{article.category}}</div>
+                    <small class="text-muted">{{article.created_at|date:'d M, Y'}}</small>
                 </div>
-                <div class="p-2 bd-highlight"> <strong>Created At : </strong>{{article.created_at|date:'d M, Y'}}</div>
-
-                
-                {% if accepted_articles %}
-                <hr>
-
-          <a href="{% url 'reviewer:publish_to_admin' article.user.id article.pk %}" class="btn btn-info">Publish to Admin</a>                  
-                {% endif %}
-                  
-               
-              </div>
-  
-  
-  
             </div>
-          </div>
-        </a>
-  
-      </div>
+            <div class="card-body p-3">
+                <div class="text-center mb-3">
+                    <img src="{% static 'image/document_static.png' %}" style="width: 64px; height: 64px;" alt="Document" class="mb-2">
+                    <h6 class="card-title mb-0 text-truncate">{{article.title}}</h6>
+                </div>
+                <div class="d-flex flex-column">
+                    <div class="mb-2">
+                        <small class="text-muted">Author:</small>
+                        <div>{{article.user.normaluser.full_name}}</div>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Status:</small>
+                        <div class="badge badge-warning">Under Review</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-top-0 p-3">
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'reviewer:check_user_article' article.pk %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fa fa-eye"></i> Review
+                    </a>
+                    {% if accepted_articles %}
+                    <a href="{% url 'reviewer:publish_to_admin' article.user.id article.pk %}" class="btn btn-success btn-sm">
+                        <i class="fa fa-check"></i> Publish
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
      

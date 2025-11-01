@@ -1,0 +1,255 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | UNIQUE JMS Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">UNIQUE JMS Administration</a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --accent-color: #3498db;
+    }
+
+    /* Fix scrolling issue */
+    #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        height: auto;
+        padding: 15px 40px;
+        background: var(--primary-color);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        padding-top: 65px !important;  /* Adjust based on header height */
+    }
+
+    #container {
+        width: 100%;
+        min-width: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    #content {
+        padding: 20px;
+        margin: 0;
+        width: auto !important;
+        float: none !important;
+    }
+
+    /* Responsive content */
+    @media (min-width: 1025px) {
+        #content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    }
+
+    /* Header and branding */
+    #branding h1 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.4rem;
+    }
+
+    #branding h1, #branding h1 a:link, #branding h1 a:visited {
+        color: white;
+    }
+
+    /* User tools */
+    #user-tools {
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
+    #user-tools a {
+        border-bottom: none;
+        padding: 5px 10px;
+        margin-left: 5px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+
+    #user-tools a:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    /* Module design */
+    .module {
+        border: none;
+        margin-bottom: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .module h2, .module caption {
+        background: var(--primary-color);
+        color: white;
+        padding: 12px 15px;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    /* Tables */
+    td, th {
+        padding: 12px;
+        vertical-align: middle;
+    }
+
+    th {
+        font-weight: 500;
+    }
+
+    /* Forms */
+    .form-row {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .submit-row {
+        background: white;
+        padding: 15px;
+        border-top: 1px solid #eee;
+    }
+
+    /* Buttons */
+    .button, input[type=submit], input[type=button], .submit-row input {
+        background: var(--accent-color);
+        padding: 8px 16px;
+        border-radius: 4px;
+        color: white;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .button:hover, input[type=submit]:hover, input[type=button]:hover {
+        background: #2980b9;
+    }
+
+    .button.default {
+        background: #2ecc71;
+    }
+
+    /* Dashboard */
+    .dashboard .module table th {
+        width: 100%;
+    }
+
+    .dashboard .module table td {
+        white-space: nowrap;
+    }
+
+    .dashboard .module table td a {
+        display: block;
+        padding: 8px 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+        #header {
+            padding: 15px 20px;
+        }
+
+        #branding h1 {
+            font-size: 1.2rem;
+        }
+
+        #user-tools {
+            float: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+    }
+
+    @media (max-width: 767px) {
+        body {
+            padding-top: 120px !important;  /* Increased for mobile header */
+        }
+
+        #header {
+            padding: 10px 15px;
+        }
+
+        #user-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        #user-tools a {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            margin: 0;
+        }
+
+        .form-row {
+            padding: 8px;
+        }
+
+        td, th {
+            padding: 8px;
+        }
+    }
+
+    /* Messages */
+    .messagelist {
+        margin: 0 0 15px 0;
+        padding: 0;
+    }
+
+    .messagelist li {
+        padding: 12px 15px;
+        margin-bottom: 8px;
+        border-radius: 4px;
+    }
+
+    /* Fix any horizontal scrolling */
+    .change-list .filtered {
+        min-height: 0;
+    }
+
+    /* Ensure content doesn't overflow */
+    .results {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* App list styling */
+    .app-auth.module {
+        margin-bottom: 20px;
+    }
+
+    .app-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .app-list li {
+        padding: 10px 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .app-list li:last-child {
+        border-bottom: none;
+    }
+</style>
+{% endblock %}

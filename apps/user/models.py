@@ -34,11 +34,15 @@ class NormalUser(models.Model):
     ('Third Gender', 'Third Gender')
 )
 
-    # institution
-    # department
-    # bio
-    
-    normal_user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    normal_user = models.OneToOneField(CustomUser, related_name='normaluser', on_delete=models.CASCADE)
+    institution = models.CharField(max_length=255, blank=True)
+    department = models.CharField(max_length=255, blank=True)
+    bio = models.TextField(blank=True)
+    research_interests = models.TextField(blank=True, help_text="Separate interests with commas")
+    website = models.URLField(blank=True)
+    linkedin = models.URLField(blank=True)
+    google_scholar = models.URLField(blank=True)
+    researchgate = models.URLField(blank=True)
     full_name = models.CharField(max_length = 250)
     email = models.EmailField()
     dob = models.DateField(null=True, blank=True)

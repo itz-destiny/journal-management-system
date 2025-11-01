@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  {{title}}
+{% endblock title %}
+
+{% block main_content %}
+<section class="content">
+  <div class="container-fluid">
+    <!-- Statistics Cards -->
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3>{{ articles_under_review }}</h3>
+            <p>Articles Under Review</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <a href="{% url 'reviewer:normal-user-index' %}" class="small-box-footer">
+            View All <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-6">
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h3>{{ articles_reviewed }}</h3>
+            <p>Articles Reviewed</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            View All <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-6">
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3>{{ pending_reviews }}</h3>
+            <p>Pending Reviews</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-hourglass-half"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            View All <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Articles -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header" style="background-color: #2c3e50; color: white;">
+            <h3 class="card-title">
+              <i class="fas fa-file-alt mr-2"></i>
+              Recent Articles Under Review
+            </h3>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Category</th>
+                  <th>Submitted</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for article in recent_articles %}
+                <tr>
+                  <td>{{ article.title }}</td>
+                  <td>{{ article.user.normaluser.full_name }}</td>
+                  <td>
+                    <span class="badge badge-info">{{ article.category }}</span>
+                  </td>
+                  <td>{{ article.created_at|date:"M d, Y" }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <a href="{% url 'reviewer:check_user_article' article.pk %}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-eye"></i> Review
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center">No articles pending review</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock main_content %}

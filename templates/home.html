@@ -31,32 +31,18 @@
                         <div class="col-sm-8">
                             <ul>
                                 <li>
-                                    <i class="fa fa-volume-control-phone" aria-hidden="true"></i> +977-083-524681
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:contact@uniquejms.com">contact@uniquejms.com</a>
                                 </li>
                                 <li>|</li>
                                 <li>
-                                    <a href="mailto:"><i class="fa fa-envelope-o" aria-hidden="true"></i>  info@musom.edu.np</a>
-                                </li>
-                                <li>|</li>
-                                <li>
-                                    <i class="fa fa-map-marker" aria-hidden="true"></i> Birendranagar, 07, itram Surkhet
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i> Student Project - 2025
                                 </li>
                             </ul>
                         </div>
                         <div class="col-sm-4">
                             <ul class="social-icon">
-                                <li class="followus-label">Follow Us :</li>
                                 <li>
-                                    <a href="https://www.facebook.com/musomskt"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                                    <a href="https://github.com" target="_blank" title="View Project on GitHub"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a>
                                 </li>
                             </ul>
                         </div>
@@ -65,48 +51,46 @@
             </div>
             <div>
             
-              <marquee class ="mt-2" style="color:#026CAC;"><h4>MUSOM - JOURNAL MANAGEMENT SYSTEM</h4></marquee>
+              <div class="text-center mt-3 mb-3">
+                <h2 style="color:#026CAC;">UNIQUE - JOURNAL MANAGEMENT SYSTEM</h2>
+                <p class="lead">A Modern Platform for Academic Publishing</p>
+              </div>
             </div>
             <header id="toggle-header">
                 <div class="container-fluid">
                     <div class="row">
-                        <nav class="navbar navbar-expand-lg navbar-light">
-                            <button class="navbar-toggler  bg-light"
-                                    type="button"
-                                    data-toggle="collapse"
-                                    data-target="#navbartoggle"
-                                    aria-controls="navbartoggle"
-                                    aria-expanded="false"
-                                    aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="navbartoggle">
-                                <div class="col-md-4">
-                                    <a href="/">
-                                        <img class="rounded img-two" style="margin-right:500px"
-                                             src="{% static 'image/musom-logo.png' %}"
-                                             alt="logo">
-                                    </a>
-                                </div>
-                            
-                                <div class="col-md-8" style="margin-left: 3%">
-                                    <ul class="navbar-nav">
-                                        <li class="nav-item active ">
-                                            <a class="nav-link" href="/"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
+                        <nav class="navbar navbar-expand-lg navbar-dark">
+                            <div class="container">
+                                <a href="/" class="navbar-brand">
+                                    <h2 class="text-white mb-0">UNIQUE JMS</h2>
+                                </a>
+                                <button class="navbar-toggler"
+                                        type="button"
+                                        data-toggle="collapse"
+                                        data-target="#navbartoggle"
+                                        aria-controls="navbartoggle"
+                                        aria-expanded="false"
+                                        aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="collapse navbar-collapse" id="navbartoggle">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item active">
+                                            <a class="nav-link px-3" href="/"><i class="fa fa-home"></i> Home</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#"><i class="fa fa-bandcamp"></i> About Us</a>
+                                            <a class="nav-link px-3" href="#"><i class="fa fa-info-circle"></i> About</a>
                                         </li>
                                         {% if request.user.is_authenticated %}
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a>
+                                                <a class="nav-link px-3" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a>
                                             </li>
                                         {% else %}
                                             <li class="nav-item">
-                                          <a class="nav-link" href="{% url 'login' %}">     <i class="fa fa-sign-in"></i>  Login</a>
+                                                <a class="nav-link px-3" href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Login</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{% url 'user:register' %}"><i class="fa fa-user"></i> Register</a>
+                                                <a class="nav-link px-3" href="{% url 'user:register' %}"><i class="fa fa-user"></i> Register</a>
                                             </li>
                                         {% endif %}
                                     </ul>
@@ -118,33 +102,29 @@
             </div>
         </header>
         <div class="row">
-            <div class="col-md-3">
-                <a href="#">
-                    <img class="rounded img-one"
-                         src="{% static 'image/mid-western-logo.png' %}"
-                         alt="logo">
-                </a>
-            </div>
-            <div class="col-md-7 mt-4" id = "search_article">
-                <div class="card card-header"
-                     style="background-color: #026CAC;
-                            color:white;">Filter articles</div>
-                <div class="card card-body p-4">
-					<form method="get">
-						<div class="input-group">
-							{{ filter_form.form|crispy }}
-
-			  <div class="input-group-btn">
-				<button
-				  type="submit"
-				  class="btn"
-				  style="background-color: #175fe6; color: white;margin-left:5px;"
-				>
-				  Search
-				</button>
-			  </div>
-						</div>
-					</form>
+            <div class="col-12 col-lg-8 mx-auto mt-4" id="search_article">
+                <div class="card shadow-sm">
+                    <div class="card-header py-3"
+                         style="background-color: #2c3e50;
+                                color: white;">
+                        <h5 class="mb-0"><i class="fa fa-search"></i> Filter Articles</h5>
+                    </div>
+                    <div class="card card-body p-4">
+                        <form method="get">
+                            <div class="row">
+                                <div class="col-12 col-md-9 mb-3 mb-md-0">
+                                    {{ filter_form.form|crispy }}
+                                </div>
+                                <div class="col-12 col-md-3 d-flex align-items-end">
+                                    <button type="submit"
+                                            class="btn btn-primary btn-block"
+                                            style="background-color: #2c3e50; border-color: #2c3e50;">
+                                        <i class="fa fa-search"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -182,7 +162,7 @@
                 {% if published_articles %}
                     <div class= "articles">
                         <div class="card card-header mb-2"
-                             style="background-color: #026CAC;
+                             style="background-color: #2c3e50;
                                     color:white;">
                             <strong>Journals articles List</strong>
                         </div>
@@ -310,62 +290,34 @@
       <hr class="clearfix w-100 d-md-none">
 
       <!-- Grid column -->
-      <div class="col-g-4 mx-auto my-md-4 my-0 mt-4 mb-1">
-
-        <!-- Contact details -->
-        <h5 class="font-weight-bold text-uppercase mb-4">Contact Information</h5>
-
-        <ul class="list-unstyled">
-         
-          <li>
-            <p>
-              <i class="fa fa-map-marker " aria-hidden="true"></i> Birendranagar 07 itram Surkhet</p>
-          </li>
-          <li>
-            <p>
-              <i class="fa fa-envelope-o" aria-hidden="true"></i> info@musom.edu.np</p>
-          </li>
-          <li>
-            <p>
-              <i class="fa fa-volume-control-phone" aria-hidden="true"></i> 083-525352</p>
-          </li>
-        
-        </ul>
-
+      <div class="col-md-6 mx-auto my-md-4 my-0 mt-4 mb-1">
+        <!-- About -->
+        <h5 class="font-weight-bold text-uppercase mb-4">About This Project</h5>
+        <p>
+          This Journal Management System is a final year student project developed to demonstrate modern web application development skills. It provides a platform for managing academic papers, peer reviews, and publications.
+        </p>
+        <p>
+          <i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:contact@uniquejms.com" class="text-white">contact@uniquejms.com</a>
+        </p>
       </div>
       <!-- Grid column -->
 
       <hr class="clearfix w-100 d-md-none">
-      {% comment %} <div class="col-lg-3">
-        <a href="#">
-            <img class="" style=""
-                 src="{% static 'image/mid-western-logo2.png' %}"
-                 alt="logo">
-        </a>
-    </div> {% endcomment %}
+      
       <!-- Grid column -->
-      <div class="col-lg-5 text-center mx-auto my-4">
-
-        <!-- Social buttons -->
-        <h5 class="font-weight-bold text-uppercase mb-4">Connect with MUSOM</h5>
-
-        <!-- Facebook -->
-        <a href = "https://www.facebook.com/musomskt" class=" text-white mr-3" >
-          <i class="fa fa-2x fa-facebook" ></i>
-        </a>
-        <!-- Twitter -->
-        <a href = "#"  class=" text-white">
-          <i class="fa fa-2x fa-instagram"  ></i>
-        </a>
-        <!-- Google +-->
-        <a href = "#" class="mx-3 text-white">
-          <i class="fa fa-2x fa-twitter"></i>
-        </a>
-        <a href = "#"  class=" text-white">
-          <i class="fa fa-2x fa-linkedin"></i>
-        </a>
-        <!-- Dribbble -->
-       
+      <div class="col-md-6 text-center mx-auto my-4">
+        <!-- Project Links -->
+        <h5 class="font-weight-bold text-uppercase mb-4">Project Resources</h5>
+        <p>
+          <a href="https://github.com" target="_blank" class="text-white">
+            <i class="fa fa-github"></i> View on GitHub
+          </a>
+        </p>
+        <p>
+          <a href="#" class="text-white">
+            <i class="fa fa-book"></i> Documentation
+          </a>
+        </p>
       </div>
       <!-- Grid column -->
 
@@ -377,8 +329,7 @@
 
   <!-- Copyright -->
   <div class="text-center p-4 text-dark bg-light">
-    © 2021 Copyright:
-    <a class="text-reset fw-bold" href="https:/musom.edu.np/">Mid-West University School of Management</a>
+    © 2025 UNIQUE - Journal Management System | Final Year Project
   </div>
   <!-- Copyright -->
 
@@ -388,12 +339,17 @@
     <style type = "text/css">
 
       #card-content{
-        border-radius:30px;
-        background-color:#FFFFFF;
-        border-radius: 15px;
-          margin: 0 auto;
-          box-shadow: 0 10px 15px rgba(0,0,0,0.3);
-          transition: .5s;
+        background-color: #ffffff;
+        border-radius: 12px;
+        margin: 1rem auto;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: 1px solid #eee;
+      }
+      
+      #card-content:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
       }
          /*for mobile*/
       @media (max-width: 991px	) {

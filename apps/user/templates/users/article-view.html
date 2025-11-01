@@ -1,53 +1,181 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}
-{{title}}
+{{ article.title }} - View Article
 {% endblock title %}
 
-
-
-{% block main_content %}
-
-<!-- Main content -->
-
-<section class="content">
-    
-    
-    <div class="container-fluid">
-
-        {% include "messages.html" %}
-
-        <div class="row">
-
-          
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-
-                <iframe src="/viewer/viewer.html?file={{article.file.url}}" width="100%"
-                    height="700px" frameborder="0"></iframe>
-           
-                <!-- <iframe id = "pdf-annotate2" src="/viewer/pdf_annotation2/index.html?documentId={{article.file.url}}" width="100%"
-                height="700px" frameborder="0"></iframe> -->
-                
-            </div>
-            <div class="col-md-1"></div>
-           
-        </div>
-
-     
-
-
-    </div>
-    </div>
-</section>
-
-
+{% block custom_css %}
 <style>
-    #magazineContainer,
-    #magazine {
-        background-color: #004de6;
+    .article-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin: 20px 0;
+    }
+
+    .article-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        background: #f8f9fa;
+    }
+
+    .article-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .article-meta {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .article-meta i {
+        margin-right: 5px;
+    }
+
+    .article-meta span {
+        margin-right: 15px;
+    }
+
+    .pdf-container {
+        width: 100%;
+        height: 800px;
+        position: relative;
+        background: #f8f9fa;
+        padding: 20px;
+    }
+
+    .download-bar {
+        padding: 15px 20px;
+        background: #f8f9fa;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-download {
+        background: #28a745;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        margin-left: 10px;
+    }
+
+    .btn-download:hover {
+        background: #218838;
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-download i {
+        margin-right: 8px;
+    }
+
+    #pdf-viewer {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .error-message {
+        text-align: center;
+        padding: 20px;
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        border-radius: 4px;
+        color: #856404;
+        margin-bottom: 20px;
+    }
+
+    .error-message i {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #856404;
     }
 </style>
+{% endblock %}
 
-{% endblock main_content %}
+{% block main_content %}
+<div class="content">
+    <div class="container-fluid">
+        {% include "messages.html" %}
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="article-container">
+                    <!-- Article Header -->
+                    <div class="article-header">
+                        <h1 class="article-title">{{ article.title }}</h1>
+                        <div class="article-meta">
+                            {% if article.category %}
+                            <span><i class="fas fa-folder"></i> {{ article.category.name }}</span>
+                            {% endif %}
+                            <span><i class="fas fa-calendar"></i> {{ article.created_at|date:"F d, Y" }}</span>
+                            <span><i class="fas fa-user"></i> {{ article.user.username }}</span>
+                        </div>
+                    </div>
 
+                    <!-- PDF Viewer -->
+                    <div class="pdf-container">
+                        {% if article.file %}
+                            <embed 
+                                src="{{ article.file.url }}#toolbar=0&navpanes=0&scrollbar=0" 
+                                type="application/pdf" 
+                                width="100%" 
+                                height="100%"
+                                id="pdf-viewer">
+                        {% else %}
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>No PDF file attached to this article.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Download Bar -->
+                    <div class="download-bar">
+                        <div class="file-info">
+                            <span><i class="fas fa-file-pdf"></i> {{ article.file.name }}</span>
+                        </div>
+                        <div>
+                            {% if article.file %}
+                                <a href="{{ article.file.url }}" class="btn-download" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i> Open in New Tab
+                                </a>
+                                <a href="{{ article.file.url }}" class="btn-download" download>
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var pdfViewer = document.getElementById('pdf-viewer');
+    if (pdfViewer) {
+        pdfViewer.onerror = function() {
+            var container = pdfViewer.parentElement;
+            container.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Unable to load the PDF viewer. Please try opening the PDF in a new tab or downloading it.</p>
+                </div>
+            `;
+        };
+    }
+});
+</script>
+{% endblock %}

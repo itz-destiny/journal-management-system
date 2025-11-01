@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html dir="ltr" mozdisallowselectionprint>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="google" content="notranslate">
+    <title>PDF Viewer</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
+
+    <style>
+      :root {
+        --scale-factor: 1.0;
+      }
+      body {
+        background-color: #eee;
+        margin: 0;
+        padding: 0;
+      }
+      #viewerContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow: auto;
+      }
+      #viewer {
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+      .page {
+        margin: 10px auto;
+        padding: 0;
+        border: 1px solid #ddd;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      canvas {
+        display: block;
+        margin: 0 auto;
+      }
+      #loadingBar {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        background-color: rgba(255,255,255,0.9);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      #loadingBar.hidden {
+        display: none;
+      }
+      #loadingBar progress {
+        width: 200px;
+        height: 10px;
+        margin: 10px 0;
+      }
+      .toolbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background-color: #474747;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        z-index: 100;
+        color: white;
+      }
+      .toolbar button {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.4);
+        color: white;
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      .toolbar button:hover {
+        background: rgba(255,255,255,0.1);
+      }
+      #pageNumber {
+        width: 50px;
+        text-align: center;
+        margin: 0 5px;
+      }
+      #scaleSelect {
+        margin: 0 5px;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body tabindex="1">
+    <div class="toolbar">
+      <button id="previous">Previous</button>
+      <button id="next">Next</button>
+      <span>Page: <input type="number" id="pageNumber" min="1"> / <span id="pageCount"></span></span>
+      <select id="scaleSelect">
+        <option value="0.5">50%</option>
+        <option value="0.75">75%</option>
+        <option value="1" selected>100%</option>
+        <option value="1.25">125%</option>
+        <option value="1.5">150%</option>
+        <option value="2">200%</option>
+      </select>
+    </div>
+
+    <div id="viewerContainer">
+      <div id="viewer" class="pdfViewer"></div>
+    </div>
+
+    <div id="loadingBar">
+      <div>Loading PDF...</div>
+      <progress max="100" value="0"></progress>
+    </div>
+
+    <script>
+      // Get the PDF URL from the query string
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const pdfUrl = urlParams.get('file');
+
+      // Initialize PDF.js
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+      let pdfDoc = null,
+          pageNum = 1,
+          pageRendering = false,
+          pageNumPending = null,
+          scale = 1.0;
+
+      function renderPage(num) {
+        pageRendering = true;
+        pdfDoc.getPage(num).then(function(page) {
+          const viewport = page.getViewport({scale: scale});
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          // Clear previous content
+          document.getElementById('viewer').innerHTML = '';
+          document.getElementById('viewer').appendChild(canvas);
+
+          // Render PDF page into canvas context
+          const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+          };
+          page.render(renderContext).promise.then(function() {
+            pageRendering = false;
+            if (pageNumPending !== null) {
+              renderPage(pageNumPending);
+              pageNumPending = null;
+            }
+          });
+
+          document.getElementById('pageNumber').value = num;
+        });
+      }
+
+      function queueRenderPage(num) {
+        if (pageRendering) {
+          pageNumPending = num;
+        } else {
+          renderPage(num);
+        }
+      }
+
+      function onPrevPage() {
+        if (pageNum <= 1) {
+          return;
+        }
+        pageNum--;
+        queueRenderPage(pageNum);
+      }
+
+      function onNextPage() {
+        if (pageNum >= pdfDoc.numPages) {
+          return;
+        }
+        pageNum++;
+        queueRenderPage(pageNum);
+      }
+
+      // Load the PDF
+      pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+        pdfDoc = pdf;
+        document.getElementById('pageCount').textContent = pdf.numPages;
+        document.getElementById('loadingBar').classList.add('hidden');
+        renderPage(pageNum);
+      }).catch(function(error) {
+        console.error('Error loading PDF:', error);
+        document.getElementById('loadingBar').innerHTML = 'Error loading PDF. Please try again.';
+      });
+
+      // Event listeners
+      document.getElementById('previous').addEventListener('click', onPrevPage);
+      document.getElementById('next').addEventListener('click', onNextPage);
+      document.getElementById('pageNumber').addEventListener('change', function() {
+        const num = parseInt(this.value);
+        if (num && num > 0 && num <= pdfDoc.numPages) {
+          pageNum = num;
+          queueRenderPage(pageNum);
+        }
+      });
+      document.getElementById('scaleSelect').addEventListener('change', function() {
+        scale = parseFloat(this.value);
+        queueRenderPage(pageNum);
+      });
+    </script>
+  </body>
+</html>
+

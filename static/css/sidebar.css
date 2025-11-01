@@ -1,0 +1,89 @@
+.main-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1040 !important;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 250px;
+}
+
+/* Fix for category dropdown */
+.nav-sidebar .nav-item {
+    position: relative !important;
+}
+
+.nav-treeview {
+    position: relative !important;
+    z-index: 1041 !important;
+    background: white !important;
+}
+
+.nav-sidebar .nav-item.has-treeview.menu-open > .nav-link {
+    z-index: 1042 !important;
+    position: relative !important;
+}
+
+/* Ensure dropdown items are visible */
+.nav-sidebar .nav-treeview > .nav-item > .nav-link {
+    position: relative !important;
+    z-index: 1043 !important;
+    background: white !important;
+}
+
+/* Fix hover states */
+.nav-sidebar .nav-item .nav-link:hover {
+    z-index: 1044 !important;
+}
+
+.content-wrapper {
+    margin-left: 250px;
+    min-height: 100vh;
+    background: #f4f6f9;
+    z-index: 800;
+}
+
+.main-header {
+    margin-left: 250px;
+    z-index: 1030;
+}
+
+@media (max-width: 991.98px) {
+    .main-sidebar {
+        transform: translateX(-250px);
+        transition: transform .3s ease-in-out;
+    }
+
+    .content-wrapper,
+    .main-header {
+        margin-left: 0;
+        transition: margin-left .3s ease-in-out;
+    }
+
+    .sidebar-open .main-sidebar {
+        transform: translateX(0);
+    }
+
+    .sidebar-open .content-wrapper,
+    .sidebar-open .main-header {
+        margin-left: 250px;
+    }
+}
+
+/* Ensure dropdowns appear above sidebar */
+.dropdown-menu {
+    z-index: 1050 !important;
+}
+
+/* Fix for nav items */
+.nav-sidebar .nav-item {
+    width: 100%;
+}
+
+/* Ensure proper sidebar width */
+.main-sidebar, 
+.main-sidebar::before {
+    width: 250px;
+    transition: margin-left .3s ease-in-out;
+}

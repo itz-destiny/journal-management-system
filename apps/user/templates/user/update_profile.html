@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Update Profile - {{ user_profile.full_name }}{% endblock %}
+
+{% block custom_css %}
+<style>
+    .profile-user-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border: 3px solid #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .card {
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        border: none;
+    }
+    .nav-pills .nav-link.active {
+        background-color: #007bff;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 8px 20px;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+    .profile-username {
+        margin-top: 15px;
+        font-weight: 600;
+    }
+    .text-muted {
+        color: #6c757d !important;
+    }
+    .list-group-item {
+        border: 1px solid rgba(0,0,0,.125);
+    }
+    .tab-content {
+        padding: 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle"
+                                src="{% if user_profile.image %}{{ user_profile.image.url }}{% else %}{% static 'image/admin.png' %}{% endif %}"
+                                alt="User profile picture">
+                        </div>
+                        <h3 class="profile-username text-center">{{ user_profile.full_name }}</h3>
+                        <p class="text-muted text-center">{{ user_profile.institution }}</p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Articles</b> <a class="float-right">{{ article_count }}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Under Review</b> <a class="float-right">{{ review_count }}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Accepted</b> <a class="float-right">{{ accepted_count }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#profile" data-toggle="tab">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#academic" data-toggle="tab">Academic</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#social" data-toggle="tab">Social Links</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                            {% csrf_token %}
+                            <div class="tab-content">
+                                <!-- Profile Tab -->
+                                <div class="active tab-pane" id="profile">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Profile Image</label>
+                                        <div class="col-sm-10">
+                                            <input type="file" name="profile_image" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Full Name</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="full_name" class="form-control" value="{{ user_profile.full_name }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Email</label>
+                                        <div class="col-sm-10">
+                                            <input type="email" name="email" class="form-control" value="{{ user_profile.email }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Phone</label>
+                                        <div class="col-sm-10">
+                                            <input type="tel" name="phone" class="form-control" value="{{ user_profile.contact }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Address</label>
+                                        <div class="col-sm-10">
+                                            <textarea name="address" class="form-control" rows="3">{{ user_profile.address }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Academic Tab -->
+                                <div class="tab-pane" id="academic">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Institution</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="institution" class="form-control" value="{{ user_profile.institution }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Department</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="department" class="form-control" value="{{ user_profile.department }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Bio</label>
+                                        <div class="col-sm-10">
+                                            <textarea name="bio" class="form-control" rows="4">{{ user_profile.bio }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Research Interests</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="research_interests" class="form-control" 
+                                                value="{{ user_profile.research_interests }}" 
+                                                placeholder="Separate interests with commas">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Social Links Tab -->
+                                <div class="tab-pane" id="social">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Website</label>
+                                        <div class="col-sm-10">
+                                            <input type="url" name="website" class="form-control" value="{{ user_profile.website }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">LinkedIn</label>
+                                        <div class="col-sm-10">
+                                            <input type="url" name="linkedin" class="form-control" value="{{ user_profile.linkedin }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Google Scholar</label>
+                                        <div class="col-sm-10">
+                                            <input type="url" name="google_scholar" class="form-control" value="{{ user_profile.google_scholar }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">ResearchGate</label>
+                                        <div class="col-sm-10">
+                                            <input type="url" name="researchgate" class="form-control" value="{{ user_profile.researchgate }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="offset-sm-2 col-sm-10">
+                                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+$(document).ready(function() {
+    // Show active tab on page load
+    var hash = window.location.hash;
+    if (hash) {
+        $('.nav-pills a[href="' + hash + '"]').tab('show');
+    }
+
+    // Update hash on tab change
+    $('.nav-pills a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash;
+    });
+
+    // Preview profile image before upload
+    $('input[name="profile_image"]').change(function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('.profile-user-img').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+});
+</script>
+{% endblock %}

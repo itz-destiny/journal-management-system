@@ -1,55 +1,68 @@
 #toggle-header {
-    background-color: #026cac;
+    background-color: #2c3e50;
     color: #fff;
     margin-top: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
-  .img-one {
-    margin-left: 100px !important;
-    margin-top: 20px !important;
-    height:170px;
-    width:180px;
-    margin-right:50%;
-  }
-  .img-two {
-    margin-left: 30px;
-    height: 55px;
-    width: 320px;
-    
-
-    
-  }
+  
   body {
-    background-color: #F8FAFA;
+    background-color: #f5f6fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
-  #header .navbar-light .navbar-nav .nav-link:focus,
-  #header .navbar-light .navbar-nav .nav-link:hover {
-    color: #fff;
+  .navbar-brand h2 {
+    font-weight: 600;
+    letter-spacing: 1px;
   }
 
   #header nav {
-    padding: 15px 0px;
+    padding: 0.5rem 0;
   }
 
-  #header .navbar-light .navbar-nav .nav-link {
+  #header .navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    padding: 1rem 0.75rem;
+    transition: all 0.2s ease;
+  }
 
-    /*  color: #5a5a5a;*/
-    font-size: 20px;
+  #header .navbar-dark .navbar-nav .nav-link:hover,
+  #header .navbar-dark .navbar-nav .nav-link:focus {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   #header {
-    border-bottom: 1px solid #ddd;
-    background-color: #fff;
-    float: left;
     width: 100%;
   }
 
-  #header ul.navbar-nav {
-    right: 0;
+  #header .navbar-brand h2 {
+    font-size: 1.5rem;
+    margin: 0;
   }
 
-  #header li.nav-item {
-    margin: 0px 10px;
+  #header .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+    padding: 0.5rem;
+  }
+
+  #header .navbar-toggler:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+  }
+
+  @media (max-width: 991.98px) {
+    #header .navbar-collapse {
+      padding: 1rem 0;
+    }
+
+    #header .navbar-nav {
+      padding-top: 0.5rem;
+    }
+
+    #header .nav-link {
+      padding: 0.75rem 1rem !important;
+    }
   }
 
   #header .navbar-light .navbar-nav .active>.nav-link,
@@ -71,46 +84,68 @@
     padding:15px 0px;
   }*/
   .topbar {
-    background-color: #d93d2b;
+    background-color: #34495e;
     color: #fff;
-    padding: 4px 0px;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
   }
 
   .topbar ul {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
   }
 
   .topbar ul li {
-    float: left;
-    list-style: none;
-    margin: 3px 7px;
-    font-size: 15px;
+    margin: 0.25rem 1rem 0.25rem 0;
+  }
+
+  .topbar ul li:last-child {
+    margin-right: 0;
   }
 
   .topbar ul li a {
     color: #fff;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .topbar ul li a:hover {
+    opacity: 0.8;
   }
 
   .topbar ul li i {
-    font-size: 18px;
-    margin-right: 3px;
-  }
-
-  .topbar ul li.followus-label {
-    font-weight: bold;
+    font-size: 1rem;
+    margin-right: 0.375rem;
   }
 
   #header .social-icon {
-    float: right;
+    margin-left: auto;
   }
 
-  /*=============Responsive css==================*/
-  @media (max-width: 991px) {
-    .topbar ul li {
-      margin: 3px 3px;
-      font-size: 12px;
+  @media (max-width: 767.98px) {
+    .topbar {
+      padding: 0.375rem 0;
     }
+
+    .topbar ul {
+      justify-content: center;
+    }
+
+    .topbar ul li {
+      margin: 0.25rem 0.5rem;
+      font-size: 0.8125rem;
+    }
+
+    #header .social-icon {
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.25rem;
+    }
+  }
 
     #header ul.navbar-nav {
       position: static;
@@ -122,9 +157,43 @@
   }
 
   .list-group {
-    margin-right: 25%;
     max-height: 300px;
-    margin-bottom: 10px;
-    overflow: scroll;
+    margin-bottom: 1rem;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+  }
+
+  #search_article .card {
+    border: none;
+    border-radius: 0.5rem;
+  }
+
+  #search_article .card-header {
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  #search_article .btn {
+    height: 100%;
+    min-height: 38px;
+    transition: all 0.2s ease;
+  }
+
+  #search_article .btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 767.98px) {
+    #search_article {
+      padding: 0 1rem;
+    }
+    
+    #search_article .btn {
+      margin-top: 1rem;
+    }
+
+    .list-group {
+      margin: 1rem;
+    }
   }

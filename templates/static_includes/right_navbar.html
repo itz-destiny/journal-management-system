@@ -111,16 +111,12 @@
       </li>
 
       <li class="user-footer">
-        <div class="float-left">
+        <div class="d-flex flex-column">
           {% if request.user|has_group:'User' %}
-          <a href="" class="btn btn-sm btn-default btn-flat">Profile</a>
+          <a href="" class="btn btn-sm btn-default btn-flat mb-2">Profile</a>
           {% endif %}
-          <a href="/user_password_reset/" class="btn btn-sm ml-2  btn-default btn-flat">Reset Password</a>
-
+          <a href="/user_password_reset/" class="btn btn-sm btn-default btn-flat mb-2">Reset Password</a>
         </div>
-        <!-- <div class="float-left ml-3">
-      <a href="" class="btn btn-default btn-flat">Settings</a>
-    </div> -->
         <div class="float-right">
 
 

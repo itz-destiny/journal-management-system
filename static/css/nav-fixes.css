@@ -1,0 +1,57 @@
+/* Fix for AdminLTE nav-treeview */
+.nav-sidebar .nav-treeview {
+    display: block !important;
+    list-style: none;
+    padding: 0;
+    background: transparent;
+}
+
+.nav-sidebar .nav-item {
+    width: 100%;
+    margin: 0;
+    position: relative;
+    list-style: none;
+    display: block;
+}
+
+/* Ensure proper dropdown animation */
+.nav-sidebar .nav-treeview {
+    display: none;
+}
+
+.nav-sidebar .nav-item.menu-open > .nav-treeview {
+    display: block;
+}
+
+/* Fix dropdown positioning */
+.nav-sidebar .nav-link {
+    position: relative;
+    display: block;
+    padding: .5rem 1rem;
+    margin: 0;
+    text-decoration: none;
+}
+
+/* Ensure proper background and hover states */
+.nav-sidebar .nav-treeview > .nav-item > .nav-link {
+    background-color: rgba(255,255,255,.1);
+}
+
+.nav-sidebar .nav-treeview > .nav-item > .nav-link:hover {
+    background-color: rgba(255,255,255,.2);
+}
+
+/* Fix arrow indicator */
+.nav-sidebar .nav-link > .right, 
+.nav-sidebar .nav-link > p > .right {
+    position: absolute;
+    right: 1rem;
+    top: .7rem;
+    transition: transform .3s ease-in-out;
+}
+
+.nav-sidebar .nav-item.menu-open > .nav-link > .right,
+.nav-sidebar .nav-item.menu-open > .nav-link > p > .right {
+    transform: rotate(-90deg);
+}
+

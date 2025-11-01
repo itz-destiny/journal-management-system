@@ -3,6 +3,47 @@
 
 <!DOCTYPE html>
 <html>
+<style>
+  /* Fix horizontal scrollbar */
+  body {
+    overflow-x: hidden;
+  }
+  
+  .container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .row {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  /* Make tables responsive */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fix content wrapper */
+  .content-wrapper {
+    min-width: 0;
+    width: 100%;
+    position: relative;
+    background: #f4f6f9;
+  }
+  
+  /* Ensure proper stacking context */
+  .wrapper {
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Remove old sidebar styles */
+</style>
 
 {% block head %}
 

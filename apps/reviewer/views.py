@@ -4,12 +4,37 @@ from django.template.loader import get_template
 from django.core.mail import EmailMessage
 from django.contrib.auth.models import Group
 from apps.user.models import NormalUser
-from django.contrib.auth.decorators import login_required, permission_required  
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
-from apps.user.models import Article,Feedback
+from apps.user.models import Article, Feedback
 from apps.user.forms import FeedbackForm
+from django.db.models import Count
 from django.contrib.auth.decorators import login_required, permission_required
 
+@login_required
+@permission_required('reviewer.view_reviewer', raise_exception=True)
+def reviewer_dashboard(request):
+    # Get reviewer statistics
+    articles_under_review = Article.objects.filter(status=STATUS_UNDER_REVIEW).count()
+    articles_reviewed = Article.objects.filter(
+        status__in=[STATUS_ACCEPTED, STATUS_REJECTED, STATUS_REVIEWER_PUBLISHED]
+    ).count()
+    pending_reviews = Article.objects.filter(status=STATUS_UNDER_REVIEW).count()
+    
+    # Get recent articles under review
+    recent_articles = Article.objects.filter(
+        status=STATUS_UNDER_REVIEW
+    ).order_by('-created_at')[:5]
+    
+    context = {
+        'title': 'Reviewer Dashboard',
+        'articles_under_review': articles_under_review,
+        'articles_reviewed': articles_reviewed,
+        'pending_reviews': pending_reviews,
+        'recent_articles': recent_articles,
+    }
+    
+    return render(request, 'reviewer/dashboard.html', context)
 
 
 

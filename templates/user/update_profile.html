@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block custom_css %}
+<style>
+  .profile-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 30px 20px;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+
+  .profile-avatar {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+  }
+
+  .profile-avatar img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.5);
+    object-fit: cover;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .avatar-upload {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: white;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .avatar-upload:hover {
+    transform: scale(1.1);
+  }
+
+  .profile-name {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 10px 0 5px;
+  }
+
+  .profile-role {
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  .profile-body {
+    padding: 30px;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .form-control {
+    border-radius: 8px;
+    border: 2px solid #e1e1e1;
+    padding: 10px 15px;
+    height: auto;
+    font-size: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+
+  .profile-section {
+    margin-bottom: 30px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f1f1f1;
+  }
+
+  .btn-update {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-update:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .profile-stats {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .stat-number {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  .contact-info i {
+    width: 25px;
+    color: #667eea;
+  }
+
+  .social-links {
+    margin-top: 20px;
+  }
+
+  .social-links a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin: 0 5px;
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  .social-links a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+  }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="profile-card">
+          <!-- Profile Header -->
+          <div class="profile-header">
+            <div class="profile-avatar">
+              <img src="{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static 'image/admin.png' %}{% endif %}" alt="Profile Image">
+              <label for="profile_image" class="avatar-upload">
+                <i class="fas fa-camera"></i>
+              </label>
+              <input type="file" id="profile_image" name="profile_image" class="d-none">
+            </div>
+            <h2 class="profile-name">{{ user.get_full_name }}</h2>
+            <p class="profile-role">{{ user.role|default:"Author" }}</p>
+            
+            <!-- Profile Stats -->
+            <div class="profile-stats">
+              <div class="stat-item">
+                <div class="stat-number">{{ user.articles.count|default:"0" }}</div>
+                <div class="stat-label">Articles</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">{{ user.reviews.count|default:"0" }}</div>
+                <div class="stat-label">Reviews</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">{{ user.citations|default:"0" }}</div>
+                <div class="stat-label">Citations</div>
+              </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-google-scholar"></i></a>
+              <a href="#"><i class="fab fa-researchgate"></i></a>
+            </div>
+          </div>
+
+          <!-- Profile Body -->
+          <div class="profile-body">
+            <!-- Personal Information -->
+            <div class="profile-section">
+              <h3 class="section-title">Personal Information</h3>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" class="form-control" name="email" value="{{ user.email }}">
+              </div>
+              <div class="form-group">
+                <label>Bio</label>
+                <textarea class="form-control" name="bio" rows="4">{{ user.bio }}</textarea>
+              </div>
+            </div>
+
+            <!-- Academic Information -->
+            <div class="profile-section">
+              <h3 class="section-title">Academic Information</h3>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Institution</label>
+                    <input type="text" class="form-control" name="institution" value="{{ user.institution }}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" class="form-control" name="department" value="{{ user.department }}">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Research Interests</label>
+                <input type="text" class="form-control" name="research_interests" value="{{ user.research_interests }}" placeholder="Separate with commas">
+              </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="profile-section">
+              <h3 class="section-title">Contact Information</h3>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" class="form-control" name="phone" value="{{ user.phone }}">
+              </div>
+              <div class="form-group">
+                <label>Address</label>
+                <textarea class="form-control" name="address" rows="3">{{ user.address }}</textarea>
+              </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="profile-section">
+              <h3 class="section-title">Social Links</h3>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label><i class="fab fa-linkedin"></i> LinkedIn</label>
+                    <input type="url" class="form-control" name="linkedin" value="{{ user.linkedin }}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label><i class="fab fa-google"></i> Google Scholar</label>
+                    <input type="url" class="form-control" name="google_scholar" value="{{ user.google_scholar }}">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label><i class="fab fa-researchgate"></i> ResearchGate</label>
+                    <input type="url" class="form-control" name="researchgate" value="{{ user.researchgate }}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label><i class="fas fa-globe"></i> Personal Website</label>
+                    <input type="url" class="form-control" name="website" value="{{ user.website }}">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-update">
+                <i class="fas fa-save mr-2"></i>Update Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block custom_js %}
+<script>
+  // Preview profile image before upload
+  document.getElementById('profile_image').addEventListener('change', function(e) {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.querySelector('.profile-avatar img').src = e.target.result;
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  });
+
+  // Form validation
+  document.querySelector('form').addEventListener('submit', function(e) {
+    const email = document.querySelector('input[name="email"]').value;
+    const phone = document.querySelector('input[name="phone"]').value;
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      e.preventDefault();
+      alert('Please enter a valid email address');
+      return;
+    }
+    
+    // Basic phone validation
+    const phoneRegex = /^\+?[\d\s-]{10,}$/;
+    if (phone && !phoneRegex.test(phone)) {
+      e.preventDefault();
+      alert('Please enter a valid phone number');
+      return;
+    }
+  });
+</script>
+{% endblock %}
+

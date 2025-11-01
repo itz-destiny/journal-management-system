@@ -10,6 +10,7 @@ urlpatterns = [
     path('article-under-review/', article_under_review, name='article-under-review'),
     path('article-accepted/', accepted_article_list, name='article-accepted'),
     path('article-rejected/', rejected_article_list, name='article-rejected'),
+    path('profile_update/', update_profile, name='update_profile'),
 ]
 
 

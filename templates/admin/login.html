@@ -1,0 +1,123 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    body.login {
+        background: #f5f6fa;
+    }
+
+    .login #header {
+        background: #2c3e50;
+        padding: 15px 20px;
+    }
+
+    .login #container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+    }
+
+    .login #content {
+        padding: 0;
+    }
+
+    .login form {
+        margin-top: 20px;
+    }
+
+    .login .form-row {
+        padding: 10px 0;
+    }
+
+    .login .form-row label {
+        display: block;
+        margin-bottom: 5px;
+        color: #2c3e50;
+    }
+
+    .login .form-row input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .login .submit-row {
+        padding: 20px 0 0;
+    }
+
+    .login .submit-row input {
+        width: 100%;
+        padding: 10px;
+        background: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .login .submit-row input:hover {
+        background: #34495e;
+    }
+
+    @media (max-width: 768px) {
+        .login #container {
+            width: 90%;
+            margin: 60px auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block bodyclass %}login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    {% if form.errors and not form.non_field_errors %}
+    <p class="errornote">
+        {% if form.errors.items|length == 1 %}Please correct the error below.{% else %}Please correct the errors below.{% endif %}
+    </p>
+    {% endif %}
+
+    {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <p class="errornote">
+        {{ error }}
+    </p>
+    {% endfor %}
+    {% endif %}
+
+    <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+        <h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">UNIQUE JMS Login</h2>
+        <div class="form-row">
+            {{ form.username.errors }}
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </div>
+        <div class="form-row">
+            {{ form.password.errors }}
+            {{ form.password.label_tag }}
+            {{ form.password }}
+            <input type="hidden" name="next" value="{{ next }}">
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Log in">
+        </div>
+    </form>
+</div>
+{% endblock %}

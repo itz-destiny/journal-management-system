@@ -1,0 +1,74 @@
+/* Main sidebar fixes */
+.main-sidebar {
+    z-index: 9999 !important; /* Highest z-index to ensure it's always on top */
+    position: fixed !important;
+    height: 100vh !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important;
+}
+
+/* Content wrapper adjustments */
+.content-wrapper {
+    position: relative;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* Navbar adjustments */
+.main-header {
+    z-index: 9998 !important; /* Just below sidebar */
+    position: relative;
+}
+
+/* Dropdown menu positioning */
+.dropdown-menu {
+    z-index: 9997 !important; /* Below navbar but above content */
+    position: absolute !important;
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 768px) {
+    .main-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar-open .main-sidebar {
+        transform: translateX(0) !important;
+    }
+
+    .dropdown-menu {
+        position: absolute !important;
+        left: auto !important;
+        right: 0 !important;
+        width: auto !important;
+        min-width: 200px !important;
+    }
+
+    /* Prevent content from flowing under sidebar when open */
+    .sidebar-open .content-wrapper,
+    .sidebar-open .main-header {
+        margin-left: 0 !important;
+    }
+
+    /* Fix for profile dropdown */
+    .navbar-nav .dropdown {
+        position: static;
+    }
+
+    /* Ensure category dropdown is visible */
+    .nav-item.dropdown {
+        position: relative !important;
+    }
+}
+}
+
+/* Fix for navbar items on mobile */
+@media (max-width: 768px) {
+    .navbar-nav {
+        margin: 0;
+    }
+
+    .navbar-nav .nav-item {
+        position: relative !important;
+    }
+}

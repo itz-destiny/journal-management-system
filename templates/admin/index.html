@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIQUE JMS Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --header-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f6fa;
+            padding-top: var(--header-height);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        #header {
+            background: var(--primary);
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #branding h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        #branding a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #user-tools {
+            display: flex;
+            gap: 1rem;
+        }
+
+        #user-tools a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.2s;
+        }
+
+        #user-tools a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Main Content */
+        #container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Apps Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .app-group {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .app-group h2 {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .app-list {
+            padding: 1.5rem;
+        }
+
+        .app-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .app-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .app-item h3 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-item h3 a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .model-list {
+            list-style: none;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .model-list a {
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background: #f8f9fa;
+            transition: all 0.2s;
+        }
+
+        .model-list a:hover {
+            background: #e9ecef;
+        }
+
+        /* Recent Actions */
+        .action-list {
+            list-style: none;
+        }
+
+        .action-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .action-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 120px;
+            }
+
+            #header {
+                height: auto;
+                padding: 1rem;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            #user-tools {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            #container {
+                padding: 1rem;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div id="branding">
+            <h1><a href="{% url 'admin:index' %}">UNIQUE JMS Administration</a></h1>
+        </div>
+        <div id="user-tools">
+            {% if user.is_authenticated %}
+                <a href="{% url 'admin:password_change' %}">Change Password</a>
+                <a href="{% url 'admin:logout' %}">Log Out</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="container">
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ app_list.0.models|length }}</div>
+                <div class="stat-label">Models</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ user_count|default:"0" }}</div>
+                <div class="stat-label">Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ app_list|length }}</div>
+                <div class="stat-label">Apps</div>
+            </div>
+        </div>
+
+        <!-- Apps Grid -->
+        <div class="dashboard-grid">
+            {% for app in app_list %}
+            <div class="app-group">
+                <h2>{{ app.name }}</h2>
+                <div class="app-list">
+                    {% for model in app.models %}
+                    <div class="app-item">
+                        {% if model.admin_url %}
+                        <h3>
+                            <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                        </h3>
+                        <div class="model-list">
+                            {% if model.add_url %}
+                            <a href="{{ model.add_url }}">➕ Add</a>
+                            {% endif %}
+                            {% if model.admin_url %}
+                            <a href="{{ model.admin_url }}">📋 List</a>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <h3>{{ model.name }}</h3>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Recent Actions -->
+            <div class="app-group">
+                <h2>Recent Actions</h2>
+                <div class="app-list">
+                    {% load log %}
+                    {% get_admin_log 10 as admin_log %}
+                    {% if not admin_log %}
+                    <p>No recent actions.</p>
+                    {% else %}
+                    <ul class="action-list">
+                        {% for entry in admin_log %}
+                        <li>
+                            {% if entry.is_addition %}➕{% endif %}
+                            {% if entry.is_change %}📝{% endif %}
+                            {% if entry.is_deletion %}❌{% endif %}
+                            {{ entry.timestamp|date:"M d, Y" }} - 
+                            {{ entry.object_repr }}
+                            {% if entry.content_type %}
+                            <span style="color: #666">({{ entry.content_type.name }})</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
