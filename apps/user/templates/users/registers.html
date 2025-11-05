@@ -325,6 +325,100 @@
         padding: 2rem;
       }
 
+      .register-form-wrapper {
+        padding: 1.5rem;
+      }
+
+      .register-card .card-header h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      body {
+        padding: 0;
+      }
+
+      .register-wrapper {
+        margin: 0;
+        border-radius: 0;
+        width: 100%;
+        max-width: 100%;
+        min-height: 100vh;
+      }
+
+      .register-hero {
+        min-height: 220px;
+        padding: 1.5rem 1rem;
+        border-radius: 0;
+      }
+
+      .hero-content h1 {
+        font-size: 1.3rem;
+      }
+
+      .brand-logo {
+        font-size: 1.3rem;
+      }
+
+      .feature-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+
+      .feature-item {
+        padding: 0.75rem;
+      }
+
+      .feature-item i {
+        font-size: 1.2rem;
+      }
+
+      .feature-item span {
+        font-size: 0.75rem;
+      }
+
+      .register-form-wrapper {
+        padding: 1rem;
+        border-radius: 0;
+      }
+
+      .register-card .card-header {
+        padding: 0 0 1rem 0;
+      }
+
+      .register-card .card-header h2 {
+        font-size: 1.3rem;
+      }
+
+      .section-title {
+        font-size: 1rem;
+      }
+
+      .form-control,
+      select.form-control,
+      textarea.form-control,
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="date"],
+      input[type="file"] {
+        padding: 0.65rem 0.85rem;
+        font-size: 0.9rem;
+      }
+
+      .btn-primary,
+      .btn-outline-secondary {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .feature-list {
+        grid-template-columns: 1fr;
+      }
+
       .hero-content h1 {
         font-size: 1.5rem;
       }

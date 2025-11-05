@@ -32,6 +32,11 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            width: 100%;
+        }
+
+        .navbar-custom .container {
+            position: relative;
         }
 
         .navbar-brand-custom {
@@ -319,6 +324,45 @@
             color: rgba(255,255,255,0.7);
         }
 
+        /* Mobile Menu Styles */
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #1e293b;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            background: white;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-nav-link {
+            padding: 1rem 1.5rem;
+            color: #475569;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 500;
+        }
+
+        .mobile-nav-link:hover {
+            background: #f8fafc;
+            color: #1f3c88;
+        }
+
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
@@ -333,6 +377,41 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .hero-section {
+                padding: 3rem 0;
+            }
+
+            .features-section {
+                padding: 3rem 0;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .brand-text {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -345,7 +424,14 @@
                     <div class="brand-icon">U</div>
                     <span class="brand-text">UNIQUE JMS</span>
                 </a>
-                <div class="d-flex align-items-center gap-4">
+                
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle d-md-none" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Desktop Menu -->
+                <div class="desktop-menu d-none d-md-flex align-items-center gap-4">
                     <a href="#features" class="nav-link-custom">Features</a>
                     <a href="#about" class="nav-link-custom">About</a>
                     {% if request.user.is_authenticated %}
@@ -354,6 +440,17 @@
                         <a href="{% url 'login' %}" class="btn-login">Sign In</a>
                     {% endif %}
                 </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="#features" class="mobile-nav-link">Features</a>
+                <a href="#about" class="mobile-nav-link">About</a>
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'home' %}" class="mobile-nav-link">Dashboard</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="mobile-nav-link">Sign In</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -535,6 +632,25 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle')?.addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+            this.querySelector('i').classList.toggle('fa-bars');
+            this.querySelector('i').classList.toggle('fa-times');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const toggle = document.getElementById('mobileMenuToggle');
+                mobileMenu.classList.remove('active');
+                toggle.querySelector('i').classList.add('fa-bars');
+                toggle.querySelector('i').classList.remove('fa-times');
+            });
+        });
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
