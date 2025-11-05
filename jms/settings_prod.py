@@ -29,7 +29,24 @@ STATIC_URL = '/static/'
 # Use basic WhiteNoise without manifest to avoid CSS processing issues
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
-# Media files - you'll need to set up cloud storage for production
+# Media files - Using Cloudinary for persistent storage on Render
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+# Cloudinary configuration (set these as environment variables on Render)
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', ''),
+    api_key=os.environ.get('CLOUDINARY_API_KEY', ''),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET', ''),
+)
+
+# Add cloudinary_storage to installed apps
+INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+
+# Use Cloudinary for media storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
