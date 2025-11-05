@@ -7,8 +7,12 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: jms.settings_prod
       - key: DATABASE_URL
-        value: postgresql://postgres:postgres@localhost:5432/unique_jms
+        fromDatabase:
+          name: unique-jms-db
+          property: connectionString
       - key: DJANGO_SECRET_KEY
         generateValue: true
       - key: DJANGO_DEBUG
