@@ -25,7 +25,9 @@ if DATABASE_URL:
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Use basic WhiteNoise without manifest to avoid CSS processing issues
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Media files - you'll need to set up cloud storage for production
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
