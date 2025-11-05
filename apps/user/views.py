@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import NormalUser, Article, STATUS_UNDER_REVIEW, STATUS_ACCEPTED, STATUS_REJECTED
 from .forms import CustomUserForm, UserRegisterForm, PaperUploadForm
 from django.contrib.auth.models import Group
+from apps.permissions.models import CustomUser
 
 @login_required
 def update_profile(request):
@@ -85,27 +86,52 @@ def user_register(request):
             group = Group.objects.get(name = 'User')
             
             if password1 == password2:
-                user = CustomUser.objects.create_user(
-                    username=username, password=password2,
-                    user_type=group)
-            
-                user.normaluser.full_name = user_form.cleaned_data['full_name']
-                user.normaluser.email = user_form.cleaned_data['email']
-                user.normaluser.dob = user_form.cleaned_data['dob']
-                user.normaluser.gender = user_form.cleaned_data['gender']
-                user.normaluser.contact = user_form.cleaned_data['contact']
-                user.normaluser.address = user_form.cleaned_data['address']
-
-                if image_url != None:
-                    user.normaluser.image = image_url
-
-                user.save()
-                user.groups.add(group)
-                
-                messages.success(request, "Successfully Created User")
-                return redirect('login')
+                try:
+                    # Create the user
+                    user = CustomUser.objects.create_user(
+                        username=username, 
+                        password=password2,
+                        user_type=group
+                    )
+                    # Add user to User group
+                    user.groups.clear()  # Clear any existing groups
+                    user.groups.add(group)
+                    user.save()
+                    
+                    print(f"User created: {user.username}")
+                    print(f"User groups: {list(user.groups.all())}")
+                    
+                    # Create or get the NormalUser profile
+                    normal_user, created = NormalUser.objects.get_or_create(
+                        normal_user=user,
+                        defaults={
+                            'full_name': user_form.cleaned_data['full_name'],
+                            'email': user_form.cleaned_data['email']
+                        }
+                    )
+                    
+                    # Update profile fields
+                    normal_user.full_name = user_form.cleaned_data['full_name']
+                    normal_user.email = user_form.cleaned_data['email']
+                    normal_user.dob = user_form.cleaned_data.get('dob')
+                    normal_user.gender = user_form.cleaned_data.get('gender', 'Male')
+                    normal_user.contact = user_form.cleaned_data.get('contact', '')
+                    normal_user.address = user_form.cleaned_data.get('address', '')
+                    
+                    if image_url:
+                        normal_user.image = image_url
+                    
+                    normal_user.save()
+                    
+                    messages.success(request, "Successfully created your account! Please login.")
+                    return redirect('login')
+                    
+                except Group.DoesNotExist:
+                    messages.error(request, "User group does not exist. Please contact administrator.")
+                except Exception as e:
+                    messages.error(request, f"Error creating account: {str(e)}")
             else:
-                messages.error(request,'Password does not match. Please check it properly.')
+                messages.error(request, 'Passwords do not match. Please check it properly.')
         
     return render(request,'users/registers.html',context)
 

@@ -1,48 +1,43 @@
-
 <!-- Dashboard -->
 <li class="nav-item">
   <a href="{% url 'reviewer:dashboard' %}" class="nav-link">
-    <i class="fas fa-tachometer-alt mr-1"></i>
-    <p>Reviewer Dashboard</p>
+    <i class="fas fa-tachometer-alt nav-icon"></i>
+    <p>Dashboard</p>
   </a>
 </li>
 
-<!-- Articles Management -->
+<!-- Articles to Review -->
 <li class="nav-item has-treeview">
   <a href="#" class="nav-link">
-    <i class="fas fa-newspaper mr-1"></i>
+    <i class="fas fa-tasks nav-icon"></i>
     <p>
-      Article Management
+      Articles to Review
       <i class="fas fa-angle-left right"></i>
     </p>
   </a>
-
   <ul class="nav nav-treeview">
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="{% url 'reviewer:normal-user-index' %}" class="nav-link">
-        <i class="fas fa-list"></i>
+        <i class="far fa-circle nav-icon"></i>
         <p>All Articles</p>
       </a>
     </li>
-    
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="#" class="nav-link" onclick="filterArticles('under-review')">
-        <i class="fas fa-clock"></i>
+        <i class="far fa-circle nav-icon"></i>
         <p>Under Review</p>
       </a>
     </li>
-
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="#" class="nav-link" onclick="filterArticles('accepted')">
-        <i class="fas fa-check-circle"></i>
-        <p>Accepted Articles</p>
+        <i class="far fa-circle nav-icon"></i>
+        <p>Accepted</p>
       </a>
     </li>
-
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="#" class="nav-link" onclick="filterArticles('rejected')">
-        <i class="fas fa-times-circle"></i>
-        <p>Rejected Articles</p>
+        <i class="far fa-circle nav-icon"></i>
+        <p>Rejected</p>
       </a>
     </li>
   </ul>
@@ -51,24 +46,22 @@
 <!-- Review Tools -->
 <li class="nav-item has-treeview">
   <a href="#" class="nav-link">
-    <i class="fas fa-tools mr-1"></i>
+    <i class="fas fa-tools nav-icon"></i>
     <p>
       Review Tools
       <i class="fas fa-angle-left right"></i>
     </p>
   </a>
-
   <ul class="nav nav-treeview">
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="#" class="nav-link">
-        <i class="fas fa-comment-alt"></i>
+        <i class="far fa-circle nav-icon"></i>
         <p>Feedback Templates</p>
       </a>
     </li>
-    
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="#" class="nav-link">
-        <i class="fas fa-file-pdf"></i>
+        <i class="far fa-circle nav-icon"></i>
         <p>PDF Annotation</p>
       </a>
     </li>
@@ -78,26 +71,23 @@
 <!-- Reports -->
 <li class="nav-item">
   <a href="#" class="nav-link">
-    <i class="fas fa-chart-bar mr-1"></i>
+    <i class="fas fa-chart-line nav-icon"></i>
     <p>Review Reports</p>
   </a>
 </li>
-{% include "sidebar/includes/authentication.html" %}
+
+<!-- Profile -->
 <li class="nav-item">
   <a href="{% url 'update_reviewer_profile' %}" class="nav-link">
-    <i class="fas fa-user"></i>
-    <p>
-      Profile
-
-    </p>
+    <i class="fas fa-user-circle nav-icon"></i>
+    <p>My Profile</p>
   </a>
 </li>
+
+<!-- Logout -->
 <li class="nav-item">
   <a href="{% url 'logout' %}" class="nav-link">
-    <i class="fas fa-sign-out-alt"></i>
-    <p>
-      Logout
-
-    </p>
+    <i class="fas fa-sign-out-alt nav-icon"></i>
+    <p>Logout</p>
   </a>
 </li>

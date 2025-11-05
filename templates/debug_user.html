@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block title %}User Debug Info{% endblock %}
+
+{% block main_content %}
+<div class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3>Current User Information</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ request.user.username }}</p>
+                <p><strong>Is Authenticated:</strong> {{ request.user.is_authenticated }}</p>
+                <p><strong>Is Superuser:</strong> {{ request.user.is_superuser }}</p>
+                <p><strong>Groups:</strong></p>
+                <ul>
+                    {% for group in request.user.groups.all %}
+                        <li>{{ group.name }}</li>
+                    {% empty %}
+                        <li>No groups assigned!</li>
+                    {% endfor %}
+                </ul>
+                
+                <hr>
+                
+                <p><strong>Group Checks:</strong></p>
+                <ul>
+                    <li>Has 'Admin' group: {{ request.user|has_group:'Admin' }}</li>
+                    <li>Has 'User' group: {{ request.user|has_group:'User' }}</li>
+                    <li>Has 'Reviewer' group: {{ request.user|has_group:'Reviewer' }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

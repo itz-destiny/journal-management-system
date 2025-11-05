@@ -139,3 +139,6 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+def debug_user_info(request):
+    return render(request, 'debug_user.html')

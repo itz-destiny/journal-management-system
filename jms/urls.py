@@ -28,6 +28,7 @@ urlpatterns = [
      path('accounts/login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
     path('dashboard/',dashboard, name = 'home'),
+    path('debug-user/', debug_user_info, name='debug_user'),
       path('',first_page, name = 'first_page'),
      path('user/',include('apps.user.urls',namespace='user')),
        path('reviewer/',include('apps.reviewer.urls',namespace='reviewer')),

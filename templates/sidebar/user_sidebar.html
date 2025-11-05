@@ -1,91 +1,54 @@
-<li class="nav-item has-treeview">
+<!-- Upload Paper -->
+<li class="nav-item">
+  <a href="{% url 'user:upload-article' %}" class="nav-link">
+    <i class="fas fa-upload nav-icon"></i>
+    <p>Upload Paper</p>
+  </a>
+</li>
 
-      <li class="nav-item">
-        <a href="{% url 'user:upload-article' %}" class="nav-link">
-          <i class="fas fa-xs fa-book"></i>
-          <p>
-            Upload Paper
-
-          </p>
-        </a>
-      </li>
-
-
-  
-  </li>
-
-
-  <!-- ----- ------------------------------------------Article category---------------------------------------------------->
+<!-- My Articles Dropdown -->
 <li class="nav-item has-treeview">
   <a href="#" class="nav-link">
-    <i class="fas  fa-book mr-1"></i>
+    <i class="fas fa-folder-open nav-icon"></i>
     <p>
-  Article Category 
-
+      My Articles
       <i class="fas fa-angle-left right"></i>
-
-
     </p>
   </a>
-
   <ul class="nav nav-treeview">
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="{% url 'user:article-under-review' %}" class="nav-link">
-        <i class="fas fa-xs fa-circle"></i>
-        <p>
-          Under Review
-
-        </p>
+        <i class="far fa-circle nav-icon"></i>
+        <p>Under Review</p>
       </a>
     </li>
-
-
-  </ul>
-
-  <ul class="nav nav-treeview">
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="{% url 'user:article-accepted' %}" class="nav-link">
-        <i class="fas fa-xs fa-circle"></i>
-        <p>
-        Accepted Articles
-
-        </p>
+        <i class="far fa-circle nav-icon"></i>
+        <p>Accepted</p>
       </a>
     </li>
-
-
-  </ul>
-  <ul class="nav nav-treeview">
-    <li class="nav-item ml-3">
+    <li class="nav-item">
       <a href="{% url 'user:article-rejected' %}" class="nav-link">
-        <i class="fas fa-xs fa-circle"></i>
-        <p>
-        Rejected Articles
-
-        </p>
+        <i class="far fa-circle nav-icon"></i>
+        <p>Rejected</p>
       </a>
     </li>
-
-
   </ul>
-
 </li>
-{% include "sidebar/includes/authentication.html" %}
-<li class="nav-item">
-  <a href="{% url 'update_user_profile' %}" class="nav-link">
-    <i class="fas fa-user"></i>
-    <p>
-      Profile
 
-    </p>
+<!-- Profile -->
+<li class="nav-item">
+  <a href="{% url 'user:update_profile' %}" class="nav-link">
+    <i class="fas fa-user-circle nav-icon"></i>
+    <p>My Profile</p>
   </a>
 </li>
+
+<!-- Logout -->
 <li class="nav-item">
   <a href="{% url 'logout' %}" class="nav-link">
-    <i class="fas fa-sign-out-alt"></i>
-    <p>
-      Logout
-
-    </p>
+    <i class="fas fa-sign-out-alt nav-icon"></i>
+    <p>Logout</p>
   </a>
 </li>

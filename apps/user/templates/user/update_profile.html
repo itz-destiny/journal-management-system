@@ -4,197 +4,327 @@
 {% block title %}Update Profile - {{ user_profile.full_name }}{% endblock %}
 
 {% block custom_css %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    .profile-user-img {
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f5f7fb;
+    }
+
+    .profile-container {
+        padding: 2rem 0;
+    }
+
+    .profile-sidebar {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        padding: 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .profile-avatar {
         width: 150px;
         height: 150px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
         object-fit: cover;
-        border: 3px solid #fff;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border: 4px solid #1f3c88;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .card {
-        box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        border: none;
+
+    .profile-name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f3c88;
+        margin-bottom: 0.5rem;
     }
-    .nav-pills .nav-link.active {
-        background-color: #007bff;
+
+    .profile-institution {
+        color: #6c757d;
+        margin-bottom: 1.5rem;
     }
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+
+    .profile-stats {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e9ecef;
     }
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        padding: 8px 20px;
+
+    .stat-item {
+        padding: 0.75rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f1f3f5;
     }
-    .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
+
+    .stat-item:last-child {
+        border-bottom: none;
     }
-    .profile-username {
-        margin-top: 15px;
+
+    .stat-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .stat-value {
+        background: #1f3c88;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
         font-weight: 600;
     }
-    .text-muted {
-        color: #6c757d !important;
+
+    .profile-form-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        overflow: hidden;
     }
-    .list-group-item {
-        border: 1px solid rgba(0,0,0,.125);
+
+    .nav-tabs {
+        border-bottom: 2px solid #e9ecef;
+        padding: 0 2rem;
+        background: #f8f9fa;
     }
+
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        font-weight: 600;
+        border: none;
+        padding: 1rem 1.5rem;
+        transition: all 0.3s;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: #1f3c88;
+        border: none;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #1f3c88;
+        background: white;
+        border: none;
+        border-bottom: 3px solid #1f3c88;
+    }
+
     .tab-content {
-        padding: 20px 0;
+        padding: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control,
+    textarea.form-control,
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="tel"],
+    input[type="file"] {
+        border-radius: 10px;
+        border: 2px solid rgba(31, 60, 136, 0.2);
+        padding: 0.75rem 1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #1f3c88;
+        box-shadow: 0 0 0 0.2rem rgba(31, 60, 136, 0.15);
+        outline: none;
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #1f3c88 0%, #162b63 100%);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 10px 20px rgba(31, 60, 136, 0.25);
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #162b63 0%, #1f3c88 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 15px 25px rgba(31, 60, 136, 0.3);
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1f3c88;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .profile-container {
+            padding: 1rem 0;
+        }
+
+        .tab-content {
+            padding: 1.5rem;
+        }
+
+        .nav-tabs .nav-link {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
     }
 </style>
 {% endblock %}
 
 {% block main_content %}
 <div class="content">
-    <div class="container-fluid">
+    <div class="container-fluid profile-container">
         <div class="row">
+            <!-- Profile Sidebar -->
             <div class="col-md-4">
-                <!-- Profile Image -->
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle"
-                                src="{% if user_profile.image %}{{ user_profile.image.url }}{% else %}{% static 'image/admin.png' %}{% endif %}"
-                                alt="User profile picture">
-                        </div>
-                        <h3 class="profile-username text-center">{{ user_profile.full_name }}</h3>
-                        <p class="text-muted text-center">{{ user_profile.institution }}</p>
+                <div class="profile-sidebar">
+                    <img class="profile-avatar"
+                         src="{% if user_profile.image %}{{ user_profile.image.url }}{% else %}{% static 'image/admin.png' %}{% endif %}"
+                         alt="Profile Picture">
+                    
+                    <h3 class="profile-name">{{ user_profile.full_name|default:request.user.username }}</h3>
+                    <p class="profile-institution">{{ user_profile.institution|default:"Author" }}</p>
 
-                        <ul class="list-group list-group-unbordered mb-3">
-                            <li class="list-group-item">
-                                <b>Articles</b> <a class="float-right">{{ article_count }}</a>
-                            </li>
-                            <li class="list-group-item">
-                                <b>Under Review</b> <a class="float-right">{{ review_count }}</a>
-                            </li>
-                            <li class="list-group-item">
-                                <b>Accepted</b> <a class="float-right">{{ accepted_count }}</a>
-                            </li>
-                        </ul>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Articles</span>
+                            <span class="stat-value">{{ article_count }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Under Review</span>
+                            <span class="stat-value">{{ review_count }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Accepted</span>
+                            <span class="stat-value">{{ accepted_count }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Profile Form -->
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header p-2">
-                        <ul class="nav nav-pills">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#profile" data-toggle="tab">Profile</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#academic" data-toggle="tab">Academic</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#social" data-toggle="tab">Social Links</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="profile-form-card">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#basic">
+                                <i class="fas fa-user"></i> Basic Info
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#academic">
+                                <i class="fas fa-graduation-cap"></i> Academic
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#social">
+                                <i class="fas fa-share-alt"></i> Social Links
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <div class="tab-content">
-                                <!-- Profile Tab -->
-                                <div class="active tab-pane" id="profile">
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Profile Image</label>
-                                        <div class="col-sm-10">
-                                            <input type="file" name="profile_image" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Full Name</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" name="full_name" class="form-control" value="{{ user_profile.full_name }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Email</label>
-                                        <div class="col-sm-10">
-                                            <input type="email" name="email" class="form-control" value="{{ user_profile.email }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Phone</label>
-                                        <div class="col-sm-10">
-                                            <input type="tel" name="phone" class="form-control" value="{{ user_profile.contact }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Address</label>
-                                        <div class="col-sm-10">
-                                            <textarea name="address" class="form-control" rows="3">{{ user_profile.address }}</textarea>
-                                        </div>
-                                    </div>
+                            
+                            <!-- Basic Info Tab -->
+                            <div id="basic" class="tab-pane fade show active">
+                                <div class="form-group">
+                                    <label for="profile_image">Profile Image</label>
+                                    <input type="file" name="profile_image" class="form-control" id="profile_image" accept="image/*">
+                                    <small class="form-text text-muted">Upload a professional profile photo</small>
                                 </div>
-
-                                <!-- Academic Tab -->
-                                <div class="tab-pane" id="academic">
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Institution</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" name="institution" class="form-control" value="{{ user_profile.institution }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Department</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" name="department" class="form-control" value="{{ user_profile.department }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Bio</label>
-                                        <div class="col-sm-10">
-                                            <textarea name="bio" class="form-control" rows="4">{{ user_profile.bio }}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Research Interests</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" name="research_interests" class="form-control" 
-                                                value="{{ user_profile.research_interests }}" 
-                                                placeholder="Separate interests with commas">
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="full_name">Full Name</label>
+                                    <input type="text" name="full_name" class="form-control" value="{{ user_profile.full_name }}" required>
                                 </div>
-
-                                <!-- Social Links Tab -->
-                                <div class="tab-pane" id="social">
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Website</label>
-                                        <div class="col-sm-10">
-                                            <input type="url" name="website" class="form-control" value="{{ user_profile.website }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">LinkedIn</label>
-                                        <div class="col-sm-10">
-                                            <input type="url" name="linkedin" class="form-control" value="{{ user_profile.linkedin }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Google Scholar</label>
-                                        <div class="col-sm-10">
-                                            <input type="url" name="google_scholar" class="form-control" value="{{ user_profile.google_scholar }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">ResearchGate</label>
-                                        <div class="col-sm-10">
-                                            <input type="url" name="researchgate" class="form-control" value="{{ user_profile.researchgate }}">
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" name="email" class="form-control" value="{{ user_profile.email }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" name="phone" class="form-control" value="{{ user_profile.contact }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <textarea name="address" class="form-control">{{ user_profile.address }}</textarea>
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <div class="offset-sm-2 col-sm-10">
-                                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                            <!-- Academic Tab -->
+                            <div id="academic" class="tab-pane fade">
+                                <div class="form-group">
+                                    <label for="institution">Institution</label>
+                                    <input type="text" name="institution" class="form-control" value="{{ user_profile.institution }}">
                                 </div>
+                                <div class="form-group">
+                                    <label for="department">Department</label>
+                                    <input type="text" name="department" class="form-control" value="{{ user_profile.department }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bio">Bio</label>
+                                    <textarea name="bio" class="form-control" rows="4">{{ user_profile.bio }}</textarea>
+                                    <small class="form-text text-muted">Tell us about your research background</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="research_interests">Research Interests</label>
+                                    <input type="text" name="research_interests" class="form-control" 
+                                           value="{{ user_profile.research_interests }}" 
+                                           placeholder="e.g., Machine Learning, Data Science, AI">
+                                    <small class="form-text text-muted">Separate interests with commas</small>
+                                </div>
+                            </div>
+
+                            <!-- Social Links Tab -->
+                            <div id="social" class="tab-pane fade">
+                                <div class="form-group">
+                                    <label for="website"><i class="fas fa-globe"></i> Personal Website</label>
+                                    <input type="url" name="website" class="form-control" value="{{ user_profile.website }}" placeholder="https://yourwebsite.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="linkedin"><i class="fab fa-linkedin"></i> LinkedIn Profile</label>
+                                    <input type="url" name="linkedin" class="form-control" value="{{ user_profile.linkedin }}" placeholder="https://linkedin.com/in/yourprofile">
+                                </div>
+                                <div class="form-group">
+                                    <label for="google_scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</label>
+                                    <input type="url" name="google_scholar" class="form-control" value="{{ user_profile.google_scholar }}" placeholder="https://scholar.google.com/citations?user=...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="researchgate"><i class="fab fa-researchgate"></i> ResearchGate</label>
+                                    <input type="url" name="researchgate" class="form-control" value="{{ user_profile.researchgate }}" placeholder="https://researchgate.net/profile/...">
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-save mr-2"></i> Save Changes
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -208,25 +338,34 @@
 {% block custom_js %}
 <script>
 $(document).ready(function() {
-    // Show active tab on page load
-    var hash = window.location.hash;
-    if (hash) {
-        $('.nav-pills a[href="' + hash + '"]').tab('show');
-    }
-
-    // Update hash on tab change
-    $('.nav-pills a').on('shown.bs.tab', function (e) {
-        window.location.hash = e.target.hash;
-    });
-
-    // Preview profile image before upload
-    $('input[name="profile_image"]').change(function() {
+    // Preview profile image
+    $('#profile_image').change(function() {
         if (this.files && this.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
-                $('.profile-user-img').attr('src', e.target.result);
+                $('.profile-avatar').attr('src', e.target.result);
             }
             reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    // Form validation
+    $('form').submit(function(e) {
+        const email = $('input[name="email"]').val();
+        const fullName = $('input[name="full_name"]').val();
+        
+        if (!fullName || !email) {
+            e.preventDefault();
+            alert('Please fill in all required fields (Full Name and Email)');
+            return false;
+        }
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            e.preventDefault();
+            alert('Please enter a valid email address');
+            return false;
         }
     });
 });

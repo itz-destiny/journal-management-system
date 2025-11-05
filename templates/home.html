@@ -1,406 +1,505 @@
-{% load static %} {% load crispy_forms_tags %}
+{% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{{ title }}</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
- 
-        <script type="text/javascript" src="{% static 'flipbook/pdfjs-flipbook/js/jquery.fancybox.min.js' %}"></script>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UNIQUE JMS | Journal Management System</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/journal_home.css' %}"/>
+    <link rel="stylesheet" href="{% static 'flipbook/pdfjs-flipbook/css/jquery.fancybox.min.css' %}"/>
+    
+    <style>
+        :root {
+            --primary: #1f3c88;
+            --primary-dark: #162b63;
+            --accent: #f5a623;
+            --text: #1a1a1a;
+            --light: #f5f7fb;
+        }
 
-        <link rel="stylesheet"
-              type="text/css"
-              href="{% static 'css/journal_home.css' %}"/>
-        <!-- flipbook js -->
-        <link rel="stylesheet"
-              type="text/css"
-              href="{% static 'flipbook/pdfjs-flipbook/css/jquery.fancybox.min.css' %}"/>
-    </head>
-    <body>
-        <div id="header">
-            <div class="topbar">
-                <div class="container-fluid">
-                    <div class="row p-2">
-                        <div class="col-sm-8">
-                            <ul>
-                                <li>
-                                    <i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:contact@uniquejms.com">contact@uniquejms.com</a>
-                                </li>
-                                <li>|</li>
-                                <li>
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i> Student Project - 2025
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-4">
-                            <ul class="social-icon">
-                                <li>
-                                    <a href="https://github.com" target="_blank" title="View Project on GitHub"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div>
-            
-              <div class="text-center mt-3 mb-3">
-                <h2 style="color:#026CAC;">UNIQUE - JOURNAL MANAGEMENT SYSTEM</h2>
-                <p class="lead">A Modern Platform for Academic Publishing</p>
-              </div>
-            </div>
-            <header id="toggle-header">
-                <div class="container-fluid">
-                    <div class="row">
-                        <nav class="navbar navbar-expand-lg navbar-dark">
-                            <div class="container">
-                                <a href="/" class="navbar-brand">
-                                    <h2 class="text-white mb-0">UNIQUE JMS</h2>
-                                </a>
-                                <button class="navbar-toggler"
-                                        type="button"
-                                        data-toggle="collapse"
-                                        data-target="#navbartoggle"
-                                        aria-controls="navbartoggle"
-                                        aria-expanded="false"
-                                        aria-label="Toggle navigation">
-                                    <span class="navbar-toggler-icon"></span>
-                                </button>
-                                <div class="collapse navbar-collapse" id="navbartoggle">
-                                    <ul class="navbar-nav ml-auto">
-                                        <li class="nav-item active">
-                                            <a class="nav-link px-3" href="/"><i class="fa fa-home"></i> Home</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="#"><i class="fa fa-info-circle"></i> About</a>
-                                        </li>
-                                        {% if request.user.is_authenticated %}
-                                            <li class="nav-item">
-                                                <a class="nav-link px-3" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a>
-                                            </li>
-                                        {% else %}
-                                            <li class="nav-item">
-                                                <a class="nav-link px-3" href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Login</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link px-3" href="{% url 'user:register' %}"><i class="fa fa-user"></i> Register</a>
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </header>
-        <div class="row">
-            <div class="col-12 col-lg-8 mx-auto mt-4" id="search_article">
-                <div class="card shadow-sm">
-                    <div class="card-header py-3"
-                         style="background-color: #2c3e50;
-                                color: white;">
-                        <h5 class="mb-0"><i class="fa fa-search"></i> Filter Articles</h5>
-                    </div>
-                    <div class="card card-body p-4">
-                        <form method="get">
-                            <div class="row">
-                                <div class="col-12 col-md-9 mb-3 mb-md-0">
-                                    {{ filter_form.form|crispy }}
-                                </div>
-                                <div class="col-12 col-md-3 d-flex align-items-end">
-                                    <button type="submit"
-                                            class="btn btn-primary btn-block"
-                                            style="background-color: #2c3e50; border-color: #2c3e50;">
-                                        <i class="fa fa-search"></i> Search
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="row"> 
-            <div class="col-md-4" style="margin-left:4rem;">
-                <ul class="list-group category_list">
-					<li
-						class="list-group-item active"
-						style="
-							background-color: #026CAC;
-							padding-right: 100px;
-						"
-					>
-						<strong> Journal Category </strong>
-					</li>
-					{% for category in category %}
-					<a href="">
-						<li class="list-group-item">{{category.name}}</li>
-					</a>
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            background: var(--light);
+        }
 
-					{% endfor %}
-          {% autoescape off %}
-            
-          {% endautoescape %}
-          
-				</ul>
-            </div>
-            <div class="col-md-7" style="position:relative">
-                {% if not published_articles %}
-                    <h5>
-                        <span style="margin-left:25%;">No articles found! Please search with appropriate keyword.</span>
-                    </h5>
-                {% endif %}
-                {% if published_articles %}
-                    <div class= "articles">
-                        <div class="card card-header mb-2"
-                             style="background-color: #2c3e50;
-                                    color:white;">
-                            <strong>Journals articles List</strong>
-                        </div>
-                        {% for article in published_articles  %}
-                        <div class="row" id="card-content">
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
 
-                        
-                          <div class="col-md-4">
-                            <a data-fancybox
-                            data-type="iframe"
-                            data-src="/viewer/viewer.html?file={{ article.file.url }}"
-                            href="javascript:;">
-                            {% if article.file_image %}
-                            <img class=" mt-1 d-md-flex my-2" src="{{article.file_image.url}}" 
-                            style="border-radius:15px;
-                            height: 133px;
-                            width: 200px;
-                            box-shadow: 2px 4px 10px rgba(0,0,0,0.3);" 
-                            alt="image">
-                            {% else %}
-                            <img class=" mt-1 d-md-flex my-2" src="{% static 'image/document_static.png' %}" 
-                            style="border-radius:15px;
-                            height: 133px;
-                            width: 200px;
-                            box-shadow: 2px 4px 10px rgba(0,0,0,0.3);" 
-                            alt="image">
-                            {% endif %}
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(245, 166, 35, 0.2), transparent 50%);
+        }
 
-                         </a>
-                                                      
-                          </div>
-                          <div class="col-md-8">
-                            <div  class="d-flex flex-column mt-1">
-                              <div class="p-2">
-                                  <a href="">{{ article.title }}</a>
-                              </div>
-                              <div class="p-2">
-                                  <strong>Author :</strong>{{ article.user.normaluser.full_name }}
-                                  <span class="ml-4">
-                                      <strong>Category:</strong> <span class="badge" style="background-color:#026CAC;color:white;">{{ article.category.name }}</span>
-                                  </span>
-                              </div>
-                              <div class="p-2">
-                                  {% comment %} <a data-fancybox
-                                     data-type="iframe"
-                                     class="btn btn-outline-primary"
-                                     data-src="/viewer/viewer.html?file={{ article.file.url }}"
-                                     href="javascript:;">
-                                      PDF
-                                  </a> {% endcomment %}
-                                  <!-- <a href="{{article.file.url}}" class="btn btn-outline-primary">PDF</a> -->
-                                  <span>
-                                      <strong>Published Date:</strong> {{ article.updated_at }}
-                                  </span>
-                              </div>
-                          </div>
-                          </div>
-                        </div>
-                        
-                            <br>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <nav aria-label="Page navigation example">
-      {% if published_articles.has_other_pages %}
-      <ul class="pagination justify-content-center">
-        {% if published_articles.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ published_articles.previous_page_number }}" tabindex="-1">Prev</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-          <span class="page-link">Prev</span>
-        </li>
-        {% endif %}
-        {% for i in published_articles.paginator.page_range %}
-        {% if published_articles.number == i %}
-        <li class="page-item active">
-          <span class="page-link">
-            {{ i }}
-            <span class="sr-only">(current)</span>
-          </span>
-        </li>
-        {% else %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-        </li>
-        {% endif %}
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
 
-        {% endfor %}
-        {% if published_articles.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ published_articles.next_page_number }}">Next</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-          <span class="page-link">Next</span>
-        </li>
-        {% endif %}
-      </ul>
-      {% endif %}
-    </nav>
-	<br>
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
 
-<footer class=" text-light pt-4" style="background-color:#026CAC">
+        .hero-section p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
 
-  <!-- Footer Links -->
-  <div class="container text-center text-md-left">
+        /* Navbar */
+        .top-navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
 
-    <!-- Grid row -->
-    <div class="row">
+        .navbar-brand h2 {
+            color: var(--primary);
+            font-weight: 700;
+            margin: 0;
+        }
 
-      <!-- Grid column -->
-     
-      <!-- Grid column -->
+        .nav-link {
+            color: var(--text);
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            transition: all 0.3s;
+        }
 
-      <hr class="clearfix w-100 d-md-none">
+        .nav-link:hover {
+            color: var(--primary);
+        }
 
-      
-      <!-- Grid column -->
+        .btn-primary-custom {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
 
-      <hr class="clearfix w-100 d-md-none">
+        .btn-primary-custom:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(31, 60, 136, 0.3);
+        }
 
-      <!-- Grid column -->
-      <div class="col-md-6 mx-auto my-md-4 my-0 mt-4 mb-1">
-        <!-- About -->
-        <h5 class="font-weight-bold text-uppercase mb-4">About This Project</h5>
-        <p>
-          This Journal Management System is a final year student project developed to demonstrate modern web application development skills. It provides a platform for managing academic papers, peer reviews, and publications.
-        </p>
-        <p>
-          <i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:contact@uniquejms.com" class="text-white">contact@uniquejms.com</a>
-        </p>
-      </div>
-      <!-- Grid column -->
+        /* Search Section */
+        .search-section {
+            margin: -60px auto 40px;
+            position: relative;
+            z-index: 10;
+        }
 
-      <hr class="clearfix w-100 d-md-none">
-      
-      <!-- Grid column -->
-      <div class="col-md-6 text-center mx-auto my-4">
-        <!-- Project Links -->
-        <h5 class="font-weight-bold text-uppercase mb-4">Project Resources</h5>
-        <p>
-          <a href="https://github.com" target="_blank" class="text-white">
-            <i class="fa fa-github"></i> View on GitHub
-          </a>
-        </p>
-        <p>
-          <a href="#" class="text-white">
-            <i class="fa fa-book"></i> Documentation
-          </a>
-        </p>
-      </div>
-      <!-- Grid column -->
+        .search-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 2rem;
+        }
 
-    </div>
-    <!-- Grid row -->
+        /* Content Section */
+        .content-section {
+            padding: 60px 0;
+        }
 
-  </div>
-  <!-- Footer Links -->
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
 
-  <!-- Copyright -->
-  <div class="text-center p-4 text-dark bg-light">
-    © 2025 UNIQUE - Journal Management System | Final Year Project
-  </div>
-  <!-- Copyright -->
+        /* Category Sidebar */
+        .category-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
 
-</footer>
-<!-- Footer -->
+        .category-header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
 
-    <style type = "text/css">
+        .category-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-      #card-content{
-        background-color: #ffffff;
-        border-radius: 12px;
-        margin: 1rem auto;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        border: 1px solid #eee;
-      }
-      
-      #card-content:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
-      }
-         /*for mobile*/
-      @media (max-width: 991px	) {
-          .articles {
+        .category-list li {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .category-list li:hover {
+            background: var(--light);
+            padding-left: 2rem;
+        }
+
+        .category-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Article Card */
+        .article-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .article-image {
             width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .badge-custom {
+            background: var(--primary);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 0 0;
+        }
+
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            background: var(--primary-dark);
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+
+        /* Pagination */
+        .pagination .page-link {
+            color: var(--primary);
+            border: none;
+            margin: 0 0.2rem;
+            border-radius: 8px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: var(--primary);
+        }
+
+        .pagination .page-link:hover {
+            background: var(--light);
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
             
-          }
-          .category_list{
-              width: 100%;
-          }
+            .search-section {
+                margin-top: 0;
+            }
         }
-        /* for medium */
-        @media (min-width: 992px) {
-          #search_article {
-              margin-left:10.5rem;
-          }
-          .category_list{
-              margin-left:10px;
-          }
-        }
-      
     </style>
-    {% if notice %}
-  
-    <!-- Modal -->
-    <div class="modal fade  bd-example-modal-lg" id="noticeModal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-      <div class="modal-dialog  modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{notice.title}}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
-             <span aria-hidden="true">&times;</span> 
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg top-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <h2 class="mb-0">UNIQUE JMS</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
             </button>
-          </div>
-          <div class="modal-body">
-    
-            <img src="{{notice.file.url}}" style="width:100%" class = "mt-3" alt="">
-    
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-          </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="btn btn-primary-custom ml-2" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-content text-center">
+            <h1>Welcome to UNIQUE Journal Management System</h1>
+            <p>A Modern Platform for Academic Publishing and Research Collaboration</p>
+            {% if not request.user.is_authenticated %}
+                <a href="{% url 'user:register' %}" class="btn btn-primary-custom btn-lg">
+                    <i class="fas fa-user-plus"></i> Join as Author
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <div class="container search-section">
+        <div class="search-card">
+            <h4 class="mb-3"><i class="fas fa-search"></i> Find Research Papers</h4>
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-9 mb-3">
+                        {{ filter_form.form|crispy }}
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary-custom btn-block">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <!-- Main Content -->
+    <section class="content-section">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 mb-4">
+                    <div class="category-card">
+                        <div class="category-header">
+                            <i class="fas fa-list"></i> Journal Categories
+                        </div>
+                        <ul class="category-list">
+                            {% for cat in category %}
+                                <li><i class="fas fa-folder"></i> {{ cat.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Articles -->
+                <div class="col-lg-9">
+                    {% if not published_articles %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-search" style="font-size: 4rem; color: #ccc;"></i>
+                            <h4 class="mt-3 text-muted">No articles found</h4>
+                            <p>Please try a different search term</p>
+                        </div>
+                    {% else %}
+                        <h2 class="section-title">Published Research Papers</h2>
+                        
+                        {% for article in published_articles %}
+                            <div class="article-card">
+                                <div class="row no-gutters">
+                                    <div class="col-md-4">
+                                        <a data-fancybox data-type="iframe" 
+                                           data-src="/viewer/viewer.html?file={{ article.file.url }}" 
+                                           href="javascript:;">
+                                            {% if article.file_image %}
+                                                <img src="{{ article.file_image.url }}" class="article-image" alt="{{ article.title }}">
+                                            {% else %}
+                                                <img src="{% static 'image/document_static.png' %}" class="article-image" alt="{{ article.title }}">
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="article-content">
+                                            <h3 class="article-title">{{ article.title }}</h3>
+                                            <div class="article-meta mb-3">
+                                                <span><i class="fas fa-user"></i> {{ article.user.normaluser.full_name }}</span>
+                                                <span><i class="fas fa-calendar"></i> {{ article.updated_at|date:"M d, Y" }}</span>
+                                            </div>
+                                            <span class="badge-custom">
+                                                <i class="fas fa-tag"></i> {{ article.category.name }}
+                                            </span>
+                                            <a href="javascript:;" data-fancybox data-type="iframe" 
+                                               data-src="/viewer/viewer.html?file={{ article.file.url }}" 
+                                               class="btn btn-sm btn-primary-custom mt-3">
+                                                <i class="fas fa-file-pdf"></i> View Paper
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <!-- Pagination -->
+                        {% if published_articles.has_other_pages %}
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    {% if published_articles.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ published_articles.previous_page_number }}">Previous</a>
+                                        </li>
+                                    {% endif %}
+                                    
+                                    {% for i in published_articles.paginator.page_range %}
+                                        <li class="page-item {% if published_articles.number == i %}active{% endif %}">
+                                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    
+                                    {% if published_articles.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ published_articles.next_page_number }}">Next</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h5>About UNIQUE JMS</h5>
+                    <p>
+                        A modern Journal Management System designed for streamlined academic publishing. 
+                        Submit, review, and publish research papers with ease.
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope"></i> <a href="mailto:contact@uniquejms.com">contact@uniquejms.com</a>
+                    </p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                        <li><a href="{% url 'user:register' %}"><i class="fas fa-user-plus"></i> Register</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                        <li><a href="#"><i class="fas fa-book"></i> Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p class="mb-0">© {{ now|date:"Y" }} UNIQUE JMS. All rights reserved. | Final Year Project</p>
+        </div>
+    </footer>
+
+    <!-- Notice Modal -->
+    {% if notice %}
+        <div class="modal fade" id="noticeModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ notice.title }}</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ notice.file.url }}" class="img-fluid" alt="{{ notice.title }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary-custom" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
-    <script type="text/javascript">
-  $(window).on('load', function () {
-    $('#noticeModal').modal('show');
-  });
-</script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'flipbook/pdfjs-flipbook/js/jquery.fancybox.min.js' %}"></script>
+    
+    <script>
+        $(window).on('load', function () {
+            $('#noticeModal').modal('show');
+        });
+    </script>
 </body>
 </html>
-

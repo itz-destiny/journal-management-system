@@ -56,6 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   {% include "static_includes/adminlte_css.html" %}
+  <link rel="stylesheet" href="{% static 'css/modern-sidebar.css' %}">
 
 
   <title> {% block title %} {% endblock %}</title>
@@ -138,6 +139,8 @@
   {% block custom_css %}{% endblock custom_css %}
   {% block custom_js %}{% endblock custom_js %}
   {% block javascript %}{% endblock %}
+    <!-- Custom sidebar dropdown -->
+    <script src="{% static 'js/sidebar-dropdown.js' %}"></script>
     <!-- ./wrapper -->
     <div class="row no-print">
       <footer class="main-footer">
