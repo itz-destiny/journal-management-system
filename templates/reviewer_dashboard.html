@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reviewer Dashboard{% endblock %}
+
+{% block head_css %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #1f3c88;
+        --primary-dark: #162b63;
+        --success: #28a745;
+        --warning: #ffc107;
+        --danger: #dc3545;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f5f7fb;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s;
+        border-left: 4px solid;
+        height: 100%;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .stat-card.primary { border-color: var(--primary); }
+    .stat-card.success { border-color: var(--success); }
+    .stat-card.warning { border-color: var(--warning); }
+    .stat-card.danger { border-color: var(--danger); }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+    }
+
+    .stat-icon.primary { background: var(--primary); }
+    .stat-icon.success { background: var(--success); }
+    .stat-icon.warning { background: var(--warning); }
+    .stat-icon.danger { background: var(--danger); }
+
+    .stat-content {
+        flex: 1;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        margin-bottom: 2rem;
+        height: 100%;
+    }
+
+    .chart-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+    }
+
+    .quick-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .quick-link-btn {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 12px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .quick-link-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(106, 17, 203, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .quick-link-btn i {
+        font-size: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .stat-card {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<!-- Dashboard Header -->
+<div class="dashboard-header">
+    <div class="container-fluid">
+        <h1><i class="fas fa-user-check"></i> Reviewer Dashboard</h1>
+        <p class="mb-0">Welcome back, {{ request.user.username }}!</p>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        
+        <!-- Quick Actions -->
+        <div class="chart-card">
+            <h3 class="chart-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+            <div class="quick-links">
+                <a href="{% url 'reviewer:normal-user-index' %}" class="quick-link-btn">
+                    <i class="fas fa-list"></i>
+                    <span>View All Articles</span>
+                </a>
+                <a href="#" class="quick-link-btn" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);">
+                    <i class="fas fa-edit"></i>
+                    <span>Pending Reviews</span>
+                </a>
+                <a href="#" class="quick-link-btn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                    <i class="fas fa-check"></i>
+                    <span>Completed Reviews</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card success">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="stat-content ml-3">
+                            <div class="stat-label">Today Accepted</div>
+                            <div class="stat-number">{{ today_accepted_article_by_reviewer_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card danger">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="stat-content ml-3">
+                            <div class="stat-label">Today Rejected</div>
+                            <div class="stat-number">{{ today_rejected_article_by_reviewer_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card primary">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="stat-content ml-3">
+                            <div class="stat-label">Today Published</div>
+                            <div class="stat-number">{{ today_publish_article_to_admin_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card warning">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-content ml-3">
+                            <div class="stat-label">Pending Review</div>
+                            <div class="stat-number">{{ article_under_review_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="chart-card">
+                    <h3 class="chart-title"><i class="fas fa-chart-pie"></i> Review Statistics</h3>
+                    <div id="reviewer_pie-container"></div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="chart-card">
+                    <h3 class="chart-title"><i class="fas fa-chart-bar"></i> Review Activity</h3>
+                    <div id="reviewer_bar-container"></div>
+                </div>
+            </div>
+        </div>
+        {% include "chart_includes/reviewer_pie.html" %}
+        {% include "chart_includes/reviewer_bar.html" %}
+
+    </div>
+</section>
+
+<script src="{% static 'plugins/highchart_js/highcharts.js' %}"></script>
+<script src="{% static 'plugins/highchart_js/modules/exporting.js' %}"></script>
+<script src="{% static 'plugins/highchart_js/modules/export-data.js' %}"></script>
+<script src="{% static 'plugins/highchart_js/modules/accessibility.js' %}"></script>
+{% endblock %}

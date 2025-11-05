@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Author Dashboard{% endblock %}
+
+{% block head_css %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #1f3c88;
+        --primary-dark: #162b63;
+        --success: #28a745;
+        --warning: #ffc107;
+        --danger: #dc3545;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f5f7fb;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s;
+        border-left: 4px solid;
+        height: 100%;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .stat-card.primary { border-color: var(--primary); }
+    .stat-card.success { border-color: var(--success); }
+    .stat-card.warning { border-color: var(--warning); }
+    .stat-card.danger { border-color: var(--danger); }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+    }
+
+    .stat-icon.primary { background: var(--primary); }
+    .stat-icon.success { background: var(--success); }
+    .stat-icon.warning { background: var(--warning); }
+    .stat-icon.danger { background: var(--danger); }
+
+    .stat-content {
+        flex: 1;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        margin-bottom: 2rem;
+        height: 100%;
+    }
+
+    .chart-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+    }
+
+    .welcome-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        margin-bottom: 2rem;
+    }
+
+    .welcome-card h3 {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .quick-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .quick-link-btn {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 12px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .quick-link-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(31, 60, 136, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .quick-link-btn i {
+        font-size: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .stat-card {
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<!-- Dashboard Header -->
+<div class="dashboard-header">
+    <div class="container-fluid">
+        <h1><i class="fas fa-user-edit"></i> Author Dashboard</h1>
+        <p class="mb-0">Welcome back, {{ request.user.username }}!</p>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        
+        <!-- Welcome Card -->
+        <div class="welcome-card">
+            <h3><i class="fas fa-rocket"></i> Quick Actions</h3>
+            <p class="text-muted">Get started with your research submission</p>
+            <div class="quick-links">
+                <a href="{% url 'user:upload-article' %}" class="quick-link-btn">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload New Paper</span>
+                </a>
+                <a href="{% url 'user:article-under-review' %}" class="quick-link-btn" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span>View Under Review</span>
+                </a>
+                <a href="{% url 'user:article-accepted' %}" class="quick-link-btn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Accepted Articles</span>
+                </a>
+                <a href="{% url 'user:update_profile' %}" class="quick-link-btn" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
+                    <i class="fas fa-user-edit"></i>
+                    <span>Update Profile</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card primary">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content ml-3">
+                            <div class="stat-label">Total Submitted</div>
+                            <div class="stat-number">{{ total_user_articles_submitted_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card success">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content ml-3">
+                            <div class="stat-label">Accepted</div>
+                            <div class="stat-number">{{ total_user_article_accepted_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card danger">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-content ml-3">
+                            <div class="stat-label">Rejected</div>
+                            <div class="stat-number">{{ total_user_article_rejected_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card warning">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-content ml-3">
+                            <div class="stat-label">Under Review</div>
+                            <div class="stat-number">{{ total_user_article_under_review_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="chart-card">
+                    <h3 class="chart-title"><i class="fas fa-chart-pie"></i> My Articles Distribution</h3>
+                    <div id="user_pie-container"></div>
+                </div>
+            </div>
+        </div>
+        {% include "chart_includes/user_pie.html" %}
+
+    </div>
+</section>
+
+<script src="{% static 'plugins/highchart_js/highcharts.js' %}"></script>
+<script src="{% static 'plugins/highchart_js/modules/exporting.js' %}"></script>
+<script src="{% static 'plugins/highchart_js/modules/export-data.js' %}"></script>
+<script src="{% static 'plugins/highchart_js/modules/accessibility.js' %}"></script>
+{% endblock %}

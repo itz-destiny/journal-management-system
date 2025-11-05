@@ -13,3 +13,6 @@ python manage.py migrate
 
 # Create default groups
 python manage.py create_groups
+
+# Create default admin and reviewer accounts
+python manage.py create_default_users
