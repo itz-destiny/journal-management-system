@@ -45,14 +45,22 @@ class Command(BaseCommand):
             )
             reviewer_user.groups.add(reviewer_group)
             
-            # Create Reviewer profile
-            Reviewer.objects.create(
-                reviewer=reviewer_user,
-                full_name='Default Reviewer',
-                email=reviewer_email,
-                contact='N/A',
-                address='N/A'
-            )
+            # The Reviewer profile is automatically created by the post_save signal
+            # Just update the profile fields
+            try:
+                reviewer_profile = reviewer_user.reviewer
+                reviewer_profile.full_name = 'Default Reviewer'
+                reviewer_profile.email = reviewer_email
+                reviewer_profile.save()
+            except Reviewer.DoesNotExist:
+                # If signal didn't fire, create manually
+                Reviewer.objects.create(
+                    reviewer_user=reviewer_user,
+                    full_name='Default Reviewer',
+                    email=reviewer_email,
+                    contact='N/A',
+                    address='N/A'
+                )
             
             self.stdout.write(self.style.SUCCESS(f'✅ Reviewer created: {reviewer_username} / {reviewer_password}'))
         else:
