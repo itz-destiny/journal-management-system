@@ -6,6 +6,12 @@
 - **Email:** admin@uniquejms.com
 - **Role:** Administrator (Full System Access)
 
+## 🔐 Editor Account
+- **Username:** `editor`
+- **Password:** `Editor@2025`
+- **Email:** editor@uniquejms.com
+- **Role:** Editor (Manage Reviews & Editorial Decisions)
+
 ## 🔐 Reviewer Account
 - **Username:** `reviewer`
 - **Password:** `Reviewer@2025`

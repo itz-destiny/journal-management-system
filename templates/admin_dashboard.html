@@ -1,0 +1,504 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Administrator Panel | UNIQUE JMS{% endblock %}
+
+{% block head_css %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #f8f9fc;
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        font-size: 1rem;
+    }
+
+    /* Tabs */
+    .nav-tabs-custom {
+        border: none;
+        margin-bottom: 2rem;
+        gap: 1rem;
+    }
+
+    .nav-tabs-custom .nav-link {
+        border: none;
+        padding: 0.75rem 1.5rem;
+        color: #64748b;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .nav-tabs-custom .nav-link.active {
+        background: #1f3c88;
+        color: white;
+    }
+
+    /* Summary Cards */
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .summary-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        transition: all 0.3s;
+    }
+
+    .summary-card:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1rem;
+    }
+
+    .card-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .card-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        color: white;
+    }
+
+    .card-icon.blue { background: #3b82f6; }
+    .card-icon.green { background: #22c55e; }
+    .card-icon.orange { background: #f97316; }
+    .card-icon.purple { background: #8b5cf6; }
+
+    .card-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    /* Info Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .info-card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 1.25rem;
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .role-badge {
+        padding: 0.3rem 0.7rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .role-author { background: #d1fae5; color: #065f46; }
+    .role-reviewer { background: #dbeafe; color: #1e40af; }
+    .role-editor { background: #e9d5ff; color: #6b21a8; }
+    .role-admin { background: #fee2e2; color: #991b1b; }
+
+    /* Activity Feed */
+    .activity-feed {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .activity-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-text {
+        color: #334155;
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .activity-time {
+        color: #94a3b8;
+        font-size: 0.85rem;
+    }
+
+    .view-all-link {
+        color: #1f3c88;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .view-all-link:hover {
+        text-decoration: underline;
+    }
+
+    /* User Table */
+    .users-table-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .table-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .users-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .users-table thead {
+        background: #f8fafc;
+    }
+
+    .users-table th {
+        padding: 1rem 1.5rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .users-table td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+        font-size: 0.95rem;
+    }
+
+    .users-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .status-active {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 0.3rem 0.7rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .btn-icon {
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        border: none;
+        background: transparent;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+        background: #f1f5f9;
+        color: #1f3c88;
+    }
+
+    .btn-deactivate {
+        color: #ef4444;
+    }
+
+    .btn-deactivate:hover {
+        background: #fee2e2;
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="content">
+    <div class="container-fluid py-4">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Administrator Panel</h1>
+            <p class="page-subtitle">Platform management and user administration</p>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs-custom">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#overview">Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#notifications">Notifications</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-pane fade show active">
+                <!-- Summary Cards -->
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="card-top">
+                            <span class="card-label">Total Users</span>
+                            <div class="card-icon blue">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="card-number">{{ normaluser_count|add:reviewer_count }}</div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="card-top">
+                            <span class="card-label">Total Submissions</span>
+                            <div class="card-icon purple">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                        </div>
+                        <div class="card-number">{{ total_articles|default:"0" }}</div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="card-top">
+                            <span class="card-label">Completed Reviews</span>
+                            <div class="card-icon green">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="card-number">{{ today_publish_count }}</div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="card-top">
+                            <span class="card-label">Pending Actions</span>
+                            <div class="card-icon orange">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="card-number">{{ unpublish_count }}</div>
+                    </div>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="info-grid">
+                    <!-- Submissions by Status -->
+                    <div class="info-card">
+                        <h3 class="info-card-title">Submissions by Status</h3>
+                        <ul class="info-list">
+                            <li class="info-item">
+                                <span class="info-label">Received</span>
+                                <span class="info-value">{{ total_submitted|default:"0" }}</span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Under Review</span>
+                                <span class="info-value">{{ under_review_count|default:"0" }}</span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Decision Pending</span>
+                                <span class="info-value">{{ unpublish_count }}</span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Completed</span>
+                                <span class="info-value">{{ today_publish_count }}</span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Rejected</span>
+                                <span class="info-value">{{ rejected_count|default:"0" }}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- User Distribution -->
+                    <div class="info-card">
+                        <h3 class="info-card-title">User Distribution</h3>
+                        <ul class="info-list">
+                            <li class="info-item">
+                                <span class="info-label">Authors</span>
+                                <span class="role-badge role-author">{{ normaluser_count }}</span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Reviewers</span>
+                                <span class="role-badge role-reviewer">{{ reviewer_count }}</span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Editors</span>
+                                <span class="role-badge role-editor">{{ editors_count|default:"0" }}</span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Administrators</span>
+                                <span class="role-badge role-admin">{{ admins_count|default:"1" }}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="info-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                            <h3 class="info-card-title" style="margin: 0;">Recent Activity</h3>
+                            <a href="#" class="view-all-link">View All</a>
+                        </div>
+                        <ul class="activity-feed">
+                            {% if recent_articles %}
+                                {% for article in recent_articles|slice:":3" %}
+                                    <li class="activity-item">
+                                        <p class="activity-text">
+                                            New manuscript submission: "{{ article.title }}" by {{ article.user.normaluser.full_name }}
+                                        </p>
+                                        <p class="activity-time">{{ article.created_at|timesince }} ago</p>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="activity-item">
+                                    <p class="activity-text" style="color: #94a3b8;">No recent activity</p>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- User Management Table -->
+                <div class="users-table-card">
+                    <div class="table-header">
+                        <h3 class="table-title">User Management</h3>
+                    </div>
+
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Join Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in all_users %}
+                                <tr>
+                                    <td style="font-weight: 600;">{{ user.normaluser.full_name|default:user.username }}</td>
+                                    <td>{{ user.normaluser.email|default:user.email }}</td>
+                                    <td>
+                                        {% if user.groups.all %}
+                                            <span class="role-badge role-{{ user.groups.all.0.name|lower }}">
+                                                {{ user.groups.all.0.name }}
+                                            </span>
+                                        {% elif user.is_superuser %}
+                                            <span class="role-badge role-admin">Admin</span>
+                                        {% else %}
+                                            <span class="role-badge role-author">User</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if user.is_active %}
+                                            <span class="status-active">Active</span>
+                                        {% else %}
+                                            <span style="background: #fee2e2; color: #991b1b; padding: 0.3rem 0.7rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                                    <td>
+                                        <button class="btn-icon" title="View Details" onclick="alert('View details coming soon')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <form method="POST" action="{% url 'admin_app:deactivate-user' user.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-icon btn-deactivate" title="{% if user.is_active %}Deactivate{% else %}Activate{% endif %}">
+                                                <i class="fas fa-user-slash"></i> {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div id="notifications" class="tab-pane fade">
+                <div class="info-card">
+                    <h3 class="info-card-title">System Notifications</h3>
+                    <p style="color: #64748b;">No new notifications</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,377 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Register as Reviewer | UNIQUE JMS</title>
+  <link rel="icon" type="image/jpg" href="{% static 'image/gci.jpg' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css'%}">
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css'%}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #6a11cb;
+      --primary-dark: #2575fc;
+      --accent: #f5a623;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: #f5f7fb;
+    }
+
+    .register-page {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .register-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 95%;
+      max-width: 1200px;
+      min-height: 90vh;
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(106, 17, 203, 0.2);
+      margin: 20px;
+    }
+
+    .register-hero {
+      position: relative;
+      background: linear-gradient(135deg, rgba(106, 17, 203, 0.95), rgba(37, 117, 252, 0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      color: #fff;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(245, 166, 35, 0.3), transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 420px;
+    }
+
+    .brand {
+      margin-bottom: 2rem;
+    }
+
+    .brand-logo {
+      display: inline-block;
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .brand-tag {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-content h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-content p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 2rem;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .feature-item {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature-item i {
+      font-size: 1.5rem;
+      color: var(--accent);
+    }
+
+    .feature-item span {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .register-form-wrapper {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: 90vh;
+      padding: 2rem;
+    }
+
+    .register-card {
+      width: 100%;
+    }
+
+    .register-card .card-header {
+      border-bottom: none;
+      padding: 0 0 1.5rem 0;
+      background: #fff;
+    }
+
+    .register-card .card-header h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .register-card .card-body {
+      padding: 0;
+    }
+
+    .form-section {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .form-control,
+    select.form-control,
+    textarea.form-control,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="file"] {
+      border-radius: 10px;
+      border: 2px solid rgba(106, 17, 203, 0.2);
+      padding: 0.75rem 1rem;
+      width: 100%;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(106, 17, 203, 0.15);
+      outline: none;
+    }
+
+    .asteriskField {
+      color: #dc3545;
+      margin-left: 3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border: none;
+      font-weight: 600;
+      padding: 0.85rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(106, 17, 203, 0.25);
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 25px rgba(106, 17, 203, 0.3);
+    }
+
+    .btn-outline-secondary {
+      border-radius: 12px;
+      border-width: 2px;
+      padding: 0.7rem;
+      font-weight: 500;
+      width: 100%;
+      border-color: #6c757d;
+      color: #6c757d;
+    }
+
+    @media (max-width: 992px) {
+      .register-wrapper {
+        grid-template-columns: 1fr;
+        margin: 10px;
+      }
+
+      .register-hero {
+        min-height: 280px;
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="register-page">
+  <div class="register-wrapper">
+    <div class="register-hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="brand">
+          <span class="brand-logo">UNIQUE JMS</span>
+          <span class="brand-tag">Reviewer Registration</span>
+        </div>
+        <h1>Join as a Peer Reviewer</h1>
+        <p>Register to review manuscripts, provide expert feedback, and contribute to advancing academic research in your field.</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <i class="fas fa-eye"></i>
+            <span>Review Papers</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-comments"></i>
+            <span>Give Feedback</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-award"></i>
+            <span>Build Reputation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="register-form-wrapper">
+      <div class="register-card">
+        <div class="card-header">
+          <h2>Reviewer Registration</h2>
+          <p class="text-muted mb-0">Create your reviewer account</p>
+        </div>
+
+        <div class="card-body">
+          {% include "messages.html" %}
+
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Account Credentials -->
+            <div class="form-section">
+              <h5 class="section-title"><i class="fas fa-key"></i> Account Credentials</h5>
+              <div class="form-group">
+                <label for="username">Username <span class="asteriskField">*</span></label>
+                <input type="text" id="username" name="username" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="password1">Password <span class="asteriskField">*</span></label>
+                <input type="password" id="password1" name="password1" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="password2">Confirm Password <span class="asteriskField">*</span></label>
+                <input type="password" id="password2" name="password2" class="form-control" required>
+              </div>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="form-section">
+              <h5 class="section-title"><i class="fas fa-user"></i> Personal Information</h5>
+              <div class="form-group">
+                <label for="full_name">Full Name <span class="asteriskField">*</span></label>
+                <input type="text" id="full_name" name="full_name" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email <span class="asteriskField">*</span></label>
+                <input type="email" id="email" name="email" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="contact">Contact Number</label>
+                <input type="tel" id="contact" name="contact" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="address">Address</label>
+                <textarea id="address" name="address" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="terms" required>
+                <label class="form-check-label" for="terms">
+                  I agree to the <a href="#" style="color: var(--primary); font-weight: 600;">Terms of Service</a>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="fas fa-user-plus mr-2"></i> Create Reviewer Account
+            </button>
+
+            <div class="text-center mt-3">
+              <p class="text-muted mb-2">Already have an account?</p>
+              <a href="/" class="btn btn-outline-secondary">Back to Login</a>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-footer text-center">
+          <small class="text-muted">© 2025 UNIQUE JMS. All rights reserved.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

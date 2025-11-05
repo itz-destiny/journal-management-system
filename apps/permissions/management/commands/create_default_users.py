@@ -66,6 +66,26 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.WARNING(f'⚠️  Reviewer user already exists'))
 
+        # Create Editor User
+        editor_username = 'editor'
+        editor_password = 'Editor@2025'
+        editor_email = 'editor@uniquejms.com'
+        
+        editor_group, _ = Group.objects.get_or_create(name='Editor')
+        
+        if not CustomUser.objects.filter(username=editor_username).exists():
+            editor_user = CustomUser.objects.create_user(
+                username=editor_username,
+                email=editor_email,
+                password=editor_password,
+                user_type=editor_group
+            )
+            editor_user.groups.add(editor_group)
+            
+            self.stdout.write(self.style.SUCCESS(f'✅ Editor created: {editor_username} / {editor_password}'))
+        else:
+            self.stdout.write(self.style.WARNING(f'⚠️  Editor user already exists'))
+
         # Print credentials summary
         self.stdout.write(self.style.SUCCESS('\n' + '='*50))
         self.stdout.write(self.style.SUCCESS('DEFAULT ACCOUNTS CREATED'))
@@ -73,6 +93,9 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'\n🔐 ADMIN LOGIN:'))
         self.stdout.write(self.style.SUCCESS(f'   Username: {admin_username}'))
         self.stdout.write(self.style.SUCCESS(f'   Password: {admin_password}'))
+        self.stdout.write(self.style.SUCCESS(f'\n🔐 EDITOR LOGIN:'))
+        self.stdout.write(self.style.SUCCESS(f'   Username: {editor_username}'))
+        self.stdout.write(self.style.SUCCESS(f'   Password: {editor_password}'))
         self.stdout.write(self.style.SUCCESS(f'\n🔐 REVIEWER LOGIN:'))
         self.stdout.write(self.style.SUCCESS(f'   Username: {reviewer_username}'))
         self.stdout.write(self.style.SUCCESS(f'   Password: {reviewer_password}'))

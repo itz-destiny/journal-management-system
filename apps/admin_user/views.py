@@ -6,7 +6,49 @@ from apps.reviewer.models import STATUS_ADMIN_PUBLISHED, STATUS_REVIEWER_PUBLISH
 from apps.permissions.models import CustomUser
 from .forms import ArticleCategoryForm,NoticeForm
 from django.contrib import messages
-from django.contrib.auth.decorators import  permission_required
+from django.contrib.auth.decorators import login_required, permission_required
+
+@login_required
+def deactivate_user(request, pk):
+    """Deactivate/activate a user account"""
+    user = get_object_or_404(CustomUser, pk=pk)
+    user.is_active = not user.is_active
+    user.save()
+    
+    status = "deactivated" if not user.is_active else "activated"
+    messages.success(request, f"User {user.username} has been {status}.")
+    return redirect('home')
+
+@login_required
+def assign_reviewers_view(request):
+    """View to assign reviewers to manuscripts"""
+    articles = Article.objects.all().order_by('-created_at')
+    reviewers = Reviewer.objects.all()
+    
+    context = {
+        'title': 'Assign Reviewers',
+        'articles': articles,
+        'reviewers': reviewers
+    }
+    return render(request, 'admin/assign_reviewers.html', context)
+
+@login_required
+def assign_reviewer_to_article(request, article_id):
+    """Assign a reviewer to a specific article"""
+    if request.method == 'POST':
+        article = get_object_or_404(Article, pk=article_id)
+        reviewer_id = request.POST.get('reviewer_id')
+        
+        if reviewer_id:
+            reviewer = get_object_or_404(Reviewer, pk=reviewer_id)
+            article.reviewed_by = reviewer
+            article.save()
+            
+            messages.success(request, f'Reviewer "{reviewer.full_name}" assigned to "{article.title}"')
+        else:
+            messages.error(request, 'Please select a reviewer')
+    
+    return redirect('admin_app:assign-reviewers')
 
 
 

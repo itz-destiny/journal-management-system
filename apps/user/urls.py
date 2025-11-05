@@ -6,6 +6,7 @@ app_name = 'user'
 urlpatterns = [
     path('register/',user_register,name='register'),
     path('upload-article/',upload_article,name='upload-article'),
+    path('track-submissions/', track_submissions, name='track-submissions'),
     path('article-view/<pk>/',article_view,name='article-view'),
     path('article-under-review/', article_under_review, name='article-under-review'),
     path('article-accepted/', accepted_article_list, name='article-accepted'),

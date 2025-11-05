@@ -5,9 +5,15 @@ from django.urls import path
 app_name = 'reviewer'
 
 urlpatterns = [
+    # Reviewer Registration
+    path('register/', reviewer_register, name='register'),
     # Reviewer Dashboard
-    path('', reviewer_dashboard, name='dashboard'),  # New dashboard view
-    path('index/', reviewer_dashboard, name='index'),  # Alias for dashboard
+    path('', reviewer_dashboard, name='dashboard'),
+    path('index/', reviewer_dashboard, name='index'),
+    # Simple Review Actions
+    path('pending-reviews/', pending_reviews, name='pending-reviews'),
+    path('approve/<int:pk>/', approve_article, name='approve-article'),
+    path('reject/<int:pk>/', reject_article, name='reject-article'),
     path('add/', add_reviewer, name='add_reviewer'),
     path('edit/<pk>/', edit_reviewer, name='edit_reviewer'),
     path('delete/<pk>/', delete_reviewer, name='delete_reviewer'),

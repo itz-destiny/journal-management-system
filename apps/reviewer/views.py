@@ -9,10 +9,103 @@ from django.contrib import messages
 from apps.user.models import Article, Feedback
 from apps.user.forms import FeedbackForm
 from django.db.models import Count
-from django.contrib.auth.decorators import login_required, permission_required
+from apps.permissions.models import CustomUser
+from .models import Reviewer
 
 @login_required
-@permission_required('reviewer.view_reviewer', raise_exception=True)
+def pending_reviews(request):
+    """Simple view showing only pending reviews"""
+    articles = Article.objects.filter(status=STATUS_UNDER_REVIEW).order_by('-created_at')
+    context = {
+        'title': 'Pending Reviews',
+        'articles': articles
+    }
+    return render(request, 'reviewer/simple_pending.html', context)
+
+@login_required
+def approve_article(request, pk):
+    """Simple approve - one click"""
+    if request.method == 'POST':
+        article = get_object_or_404(Article, pk=pk)
+        article.status = STATUS_ACCEPTED
+        article.save()
+        
+        # Create feedback
+        Feedback.objects.create(
+            article=article,
+            status='Accepted',
+            feedback='Approved by reviewer',
+            user=article.user.normaluser if hasattr(article.user, 'normaluser') else None
+        )
+        
+        messages.success(request, f'"{article.title}" has been approved!')
+        return redirect('reviewer:pending-reviews')
+    return redirect('reviewer:pending-reviews')
+
+@login_required
+def reject_article(request, pk):
+    """Simple reject - one click"""
+    if request.method == 'POST':
+        article = get_object_or_404(Article, pk=pk)
+        article.status = STATUS_REJECTED
+        article.save()
+        
+        # Create feedback
+        Feedback.objects.create(
+            article=article,
+            status='Rejected',
+            feedback='Rejected by reviewer',
+            user=article.user.normaluser if hasattr(article.user, 'normaluser') else None
+        )
+        
+        messages.success(request, f'"{article.title}" has been rejected.')
+        return redirect('reviewer:pending-reviews')
+    return redirect('reviewer:pending-reviews')
+
+def reviewer_register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        contact = request.POST.get('contact', '')
+        address = request.POST.get('address', '')
+        
+        if password1 == password2:
+            try:
+                reviewer_group = Group.objects.get(name='Reviewer')
+                
+                # Create user
+                user = CustomUser.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password2,
+                    user_type=reviewer_group
+                )
+                user.groups.add(reviewer_group)
+                
+                # Update reviewer profile (created by signal)
+                try:
+                    reviewer_profile = user.reviewer
+                    reviewer_profile.full_name = full_name
+                    reviewer_profile.email = email
+                    reviewer_profile.contact = contact
+                    reviewer_profile.address = address
+                    reviewer_profile.save()
+                except:
+                    pass
+                
+                messages.success(request, "Reviewer account created successfully! Please login.")
+                return redirect('login')
+            except Exception as e:
+                messages.error(request, f"Error creating account: {str(e)}")
+        else:
+            messages.error(request, "Passwords do not match!")
+    
+    return render(request, 'reviewer/register.html')
+
+@login_required
 def reviewer_dashboard(request):
     # Get reviewer statistics
     articles_under_review = Article.objects.filter(status=STATUS_UNDER_REVIEW).count()

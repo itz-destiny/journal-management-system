@@ -1,0 +1,399 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Assigned Manuscripts | UNIQUE JMS{% endblock %}
+
+{% block custom_css %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #f8f9fc;
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        font-size: 1rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card-mini {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .stat-icon-mini {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .stat-icon-mini.blue { background: #3b82f6; }
+    .stat-icon-mini.orange { background: #f59e0b; }
+
+    .stat-content-mini {
+        flex: 1;
+    }
+
+    .stat-number-mini {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .stat-label-mini {
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    .search-filter-bar {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        padding-left: 2.5rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2364748b' viewBox='0 0 24 24'%3E%3Cpath d='M21 21l-5.2-5.2M11 19a8 8 0 100-16 8 8 0 000 16z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: 0.75rem center;
+        background-size: 20px;
+    }
+
+    .filter-select {
+        padding: 0.75rem 2.5rem 0.75rem 1rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    .manuscripts-table-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .table-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .manuscripts-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .manuscripts-table thead {
+        background: #f8fafc;
+    }
+
+    .manuscripts-table th {
+        padding: 1rem 1.5rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .manuscripts-table td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+        font-size: 0.95rem;
+    }
+
+    .manuscripts-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .manuscript-title-cell {
+        font-weight: 600;
+        color: #1e293b;
+        max-width: 300px;
+    }
+
+    .authors-cell {
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .meta-with-icon {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #64748b;
+    }
+
+    .meta-with-icon i {
+        color: #94a3b8;
+    }
+
+    .status-badge {
+        padding: 0.4rem 0.9rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        display: inline-block;
+    }
+
+    .status-under-review {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-accepted {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .status-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .btn-view {
+        background: #1f3c88;
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .btn-view:hover {
+        background: #162b63;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+
+    .table-footer {
+        padding: 1rem 1.5rem;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .manuscripts-table {
+            font-size: 0.85rem;
+        }
+
+        .manuscripts-table th,
+        .manuscripts-table td {
+            padding: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="content">
+    <div class="container-fluid py-4">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">My Assigned Manuscripts</h1>
+            <p class="page-subtitle">Review and submit feedback for manuscripts assigned to you</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card-mini">
+                <div class="stat-icon-mini blue">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-content-mini">
+                    <div class="stat-number-mini">{{ articles_under_review_count }}</div>
+                    <div class="stat-label-mini">Under Review</div>
+                </div>
+            </div>
+            <div class="stat-card-mini">
+                <div class="stat-icon-mini orange">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content-mini">
+                    <div class="stat-number-mini">{{ pending_count|default:"0" }}</div>
+                    <div class="stat-label-mini">Decision Ready</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="search-filter-bar">
+            <input type="text" 
+                   class="search-input" 
+                   placeholder="Search by title, author, or university..." 
+                   id="searchInput">
+            <select class="filter-select" id="statusFilter">
+                <option value="">All Statuses</option>
+                <option value="under-review">Under Review</option>
+                <option value="accepted">Accepted</option>
+                <option value="rejected">Rejected</option>
+            </select>
+        </div>
+
+        <!-- Manuscripts Table -->
+        <div class="manuscripts-table-card">
+            <div class="table-header">
+                <h3 class="table-title">Assigned Manuscripts</h3>
+            </div>
+
+            {% if articles %}
+                <table class="manuscripts-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Authors</th>
+                            <th>Submitted By</th>
+                            <th>Category</th>
+                            <th>Assigned Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in articles %}
+                            <tr>
+                                <td class="manuscript-title-cell">{{ article.title }}</td>
+                                <td class="authors-cell">{{ article.user.normaluser.full_name }}</td>
+                                <td>
+                                    <div class="meta-with-icon">
+                                        <i class="fas fa-user"></i>
+                                        {{ article.user.username }}
+                                    </div>
+                                </td>
+                                <td>{{ article.category.name|default:"N/A" }}</td>
+                                <td>
+                                    <div class="meta-with-icon">
+                                        <i class="fas fa-calendar"></i>
+                                        {{ article.created_at|date:"M d, Y" }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-badge 
+                                        {% if article.status == 'Under Review' %}status-under-review
+                                        {% elif article.status == 'Accepted' or 'Published' in article.status %}status-accepted
+                                        {% elif article.status == 'Rejected' %}status-rejected
+                                        {% endif %}">
+                                        {{ article.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{% url 'user:article-view' article.id %}" class="btn-view">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-footer">
+                    Showing {{ articles.count }} of {{ articles.count }} manuscripts
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox empty-icon"></i>
+                    <h3 style="color: #1e293b; font-weight: 600;">No Manuscripts Assigned</h3>
+                    <p style="color: #64748b;">You don't have any manuscripts assigned for review yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.manuscripts-table tbody tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    // Filter functionality
+    document.getElementById('statusFilter').addEventListener('change', function() {
+        const filterValue = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.manuscripts-table tbody tr');
+        
+        rows.forEach(row => {
+            if (!filterValue) {
+                row.style.display = '';
+                return;
+            }
+            const status = row.querySelector('.status-badge').textContent.toLowerCase();
+            row.style.display = status.includes(filterValue.replace('-', ' ')) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

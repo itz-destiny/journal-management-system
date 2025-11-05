@@ -6,19 +6,27 @@
   </a>
 </li>
 
-<!-- Submit Paper -->
+<!-- All Manuscripts -->
 <li class="nav-item">
-  <a href="{% url 'user:upload-article' %}" class="nav-link">
-    <i class="fas fa-upload nav-icon"></i>
-    <p>Submit Paper</p>
+  <a href="{% url 'admin_app:user-view' %}" class="nav-link">
+    <i class="fas fa-file-alt nav-icon"></i>
+    <p>All Manuscripts</p>
   </a>
 </li>
 
-<!-- My Papers -->
+<!-- Assign Reviewers -->
 <li class="nav-item">
-  <a href="{% url 'user:track-submissions' %}" class="nav-link">
-    <i class="fas fa-file-alt nav-icon"></i>
-    <p>My Papers</p>
+  <a href="{% url 'admin_app:assign-reviewers' %}" class="nav-link">
+    <i class="fas fa-user-check nav-icon"></i>
+    <p>Assign Reviewers</p>
+  </a>
+</li>
+
+<!-- Editorial Decisions -->
+<li class="nav-item">
+  <a href="{% url 'reviewer:pending-reviews' %}" class="nav-link">
+    <i class="fas fa-gavel nav-icon"></i>
+    <p>Make Decisions</p>
   </a>
 </li>
 

@@ -1,0 +1,493 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Submit Manuscript | UNIQUE JMS{% endblock %}
+
+{% block custom_css %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #f8f9fc;
+    }
+
+    .submission-flow {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .steps-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .steps-container::before {
+        content: '';
+        position: absolute;
+        top: 25px;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background: #e0e6ed;
+        z-index: 0;
+    }
+
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        position: relative;
+        z-index: 1;
+        flex: 1;
+    }
+
+    .step-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #e0e6ed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #94a3b8;
+        transition: all 0.3s;
+    }
+
+    .step.active .step-circle {
+        background: #1f3c88;
+        border-color: #1f3c88;
+        color: white;
+        box-shadow: 0 4px 12px rgba(31, 60, 136, 0.3);
+    }
+
+    .step.completed .step-circle {
+        background: #22c55e;
+        border-color: #22c55e;
+        color: white;
+    }
+
+    .step-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #64748b;
+        text-align: center;
+    }
+
+    .step.active .step-label {
+        color: #1f3c88;
+    }
+
+    .step-description {
+        font-size: 0.8rem;
+        color: #94a3b8;
+        text-align: center;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .form-card h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-card .subtitle {
+        color: #64748b;
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .required-mark {
+        color: #ef4444;
+        margin-left: 3px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+        background: white;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #1f3c88;
+        box-shadow: 0 0 0 3px rgba(31, 60, 136, 0.1);
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .form-hint {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin-top: 0.4rem;
+    }
+
+    .file-upload-zone {
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+        background: #f8fafc;
+    }
+
+    .file-upload-zone:hover {
+        border-color: #1f3c88;
+        background: #f1f5f9;
+    }
+
+    .file-upload-zone.dragover {
+        border-color: #1f3c88;
+        background: #eef2ff;
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+        color: #94a3b8;
+        margin-bottom: 1rem;
+    }
+
+    .file-upload-zone:hover .upload-icon {
+        color: #1f3c88;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .btn {
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-secondary {
+        background: white;
+        color: #475569;
+        border: 1.5px solid #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+        background: #f8fafc;
+    }
+
+    .btn-primary {
+        background: #1f3c88;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #162b63;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(31, 60, 136, 0.3);
+    }
+
+    .selected-file {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f1f5f9;
+        border-radius: 8px;
+        display: none;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .selected-file.show {
+        display: flex;
+    }
+
+    .file-icon {
+        width: 40px;
+        height: 40px;
+        background: #1f3c88;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .file-info {
+        flex: 1;
+    }
+
+    .file-name {
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .file-size {
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    @media (max-width: 768px) {
+        .steps-container {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .steps-container::before {
+            display: none;
+        }
+
+        .form-card {
+            padding: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+            gap: 1rem;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="content">
+    <div class="container-fluid py-4">
+        <!-- Progress Steps -->
+        <div class="submission-flow">
+            <div class="steps-container">
+                <div class="step active">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Metadata</div>
+                    <div class="step-description">Basic information</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">File Upload</div>
+                    <div class="step-description">Upload manuscript</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Confirmation</div>
+                    <div class="step-description">Review and submit</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-card">
+            <h2>Metadata</h2>
+            <p class="subtitle">Basic information about your manuscript</p>
+
+            <form method="POST" enctype="multipart/form-data" id="manuscriptForm">
+                {% csrf_token %}
+                {% include "messages.html" %}
+
+                <!-- Manuscript Title -->
+                <div class="form-group">
+                    <label for="title">Manuscript Title<span class="required-mark">*</span></label>
+                    <input type="text" 
+                           id="title" 
+                           name="title" 
+                           class="form-control" 
+                           placeholder="Enter the full title of your manuscript"
+                           value="{{ form.title.value|default:'' }}"
+                           required>
+                    <div class="form-hint">Be descriptive and specific</div>
+                </div>
+
+                <!-- Category -->
+                <div class="form-group">
+                    <label for="category">Research Category<span class="required-mark">*</span></label>
+                    <select id="category" name="category" class="form-control" required>
+                        <option value="">Select a category</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="form-hint">Choose the category that best fits your research</div>
+                </div>
+
+                <!-- Abstract -->
+                <div class="form-group">
+                    <label for="description">Abstract<span class="required-mark">*</span></label>
+                    <textarea id="description" 
+                              name="description" 
+                              class="form-control" 
+                              placeholder="Provide a concise summary of your research (max 500 words)"
+                              required>{{ form.description.value|default:'' }}</textarea>
+                    <div class="form-hint">Maximum 500 words</div>
+                </div>
+
+                <!-- Manuscript File -->
+                <div class="form-group">
+                    <label for="file">Manuscript File (PDF)<span class="required-mark">*</span></label>
+                    <div class="file-upload-zone" id="fileUploadZone">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p style="margin: 0; font-weight: 600; color: #1e293b;">Drop your PDF here or click to browse</p>
+                        <p style="margin: 0.5rem 0 0; font-size: 0.9rem; color: #64748b;">Maximum file size: 10MB</p>
+                        <input type="file" 
+                               id="file" 
+                               name="file" 
+                               accept=".pdf" 
+                               style="display: none;" 
+                               required>
+                    </div>
+                    <div class="selected-file" id="selectedFile">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name" id="fileName"></div>
+                            <div class="file-size" id="fileSize"></div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="clearFile()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cover Image (Optional) -->
+                <div class="form-group">
+                    <label for="file_image">Cover Image (Optional)</label>
+                    <input type="file" 
+                           id="file_image" 
+                           name="file_image" 
+                           accept="image/*" 
+                           class="form-control">
+                    <div class="form-hint">Add a visual representation of your research</div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <a href="{% url 'home' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Submit Manuscript <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // File upload handling
+    const fileUploadZone = document.getElementById('fileUploadZone');
+    const fileInput = document.getElementById('file');
+    const selectedFileDiv = document.getElementById('selectedFile');
+
+    fileUploadZone.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            displayFile(this.files[0]);
+        }
+    });
+
+    // Drag and drop
+    fileUploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadZone.classList.add('dragover');
+    });
+
+    fileUploadZone.addEventListener('dragleave', () => {
+        fileUploadZone.classList.remove('dragover');
+    });
+
+    fileUploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            displayFile(files[0]);
+        }
+    });
+
+    function displayFile(file) {
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = formatFileSize(file.size);
+        selectedFileDiv.classList.add('show');
+    }
+
+    function clearFile() {
+        fileInput.value = '';
+        selectedFileDiv.classList.remove('show');
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    // Form validation
+    document.getElementById('manuscriptForm').addEventListener('submit', function(e) {
+        const title = document.getElementById('title').value;
+        const category = document.getElementById('category').value;
+        const description = document.getElementById('description').value;
+        const file = document.getElementById('file').files[0];
+
+        if (!title || !category || !description || !file) {
+            e.preventDefault();
+            alert('Please fill in all required fields');
+            return false;
+        }
+
+        if (file && file.size > 10 * 1024 * 1024) {
+            e.preventDefault();
+            alert('File size must be less than 10MB');
+            return false;
+        }
+    });
+</script>
+{% endblock %}

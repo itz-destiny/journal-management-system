@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Assign Reviewers{% endblock %}
+
+{% block custom_css %}
+<style>
+    .manuscript-card {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .manuscript-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 1rem;
+    }
+
+    .manuscript-info {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+    }
+
+    .reviewer-section {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+
+    .select-reviewer {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-assign {
+        background: #3b82f6;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-assign:hover {
+        background: #2563eb;
+    }
+
+    .current-reviewer {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="content">
+    <div class="container-fluid py-4">
+        <h2 style="margin-bottom: 2rem;">Assign Reviewers to Manuscripts</h2>
+
+        {% if articles %}
+            {% for article in articles %}
+                <div class="manuscript-card">
+                    <h3 class="manuscript-title">{{ article.title }}</h3>
+                    <div class="manuscript-info">
+                        <span><i class="fas fa-user"></i> Author: {{ article.user.normaluser.full_name|default:article.user.username }}</span> |
+                        <span><i class="fas fa-calendar"></i> Submitted: {{ article.created_at|date:"M d, Y" }}</span> |
+                        <span><i class="fas fa-tag"></i> {{ article.category.name|default:"N/A" }}</span>
+                    </div>
+
+                    <div class="reviewer-section">
+                        {% if article.reviewed_by %}
+                            <div class="current-reviewer">
+                                <i class="fas fa-user-check"></i> Current Reviewer: {{ article.reviewed_by.full_name }}
+                            </div>
+                        {% else %}
+                            <p style="color: #f59e0b; margin-bottom: 1rem;"><i class="fas fa-exclamation-triangle"></i> No reviewer assigned</p>
+                        {% endif %}
+
+                        <form method="POST" action="{% url 'admin_app:assign-reviewer-to-article' article.id %}">
+                            {% csrf_token %}
+                            <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Select Reviewer:</label>
+                            <select name="reviewer_id" class="select-reviewer" required>
+                                <option value="">-- Choose a Reviewer --</option>
+                                {% for reviewer in reviewers %}
+                                    <option value="{{ reviewer.id }}" {% if article.reviewed_by.id == reviewer.id %}selected{% endif %}>
+                                        {{ reviewer.full_name }} ({{ reviewer.email }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn-assign">
+                                <i class="fas fa-check"></i> Assign Reviewer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 4rem; background: white; border-radius: 12px;">
+                <i class="fas fa-inbox" style="font-size: 4rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                <h3>No Manuscripts</h3>
+                <p style="color: #64748b;">No manuscripts available to assign reviewers</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -32,6 +32,7 @@ def update_profile(request):
         user_profile.department = request.POST.get('department', '')
         user_profile.bio = request.POST.get('bio', '')
         user_profile.research_interests = request.POST.get('research_interests', '')
+        user_profile.gender = request.POST.get('gender', 'Male')
         
         # Social Links
         user_profile.website = request.POST.get('website', '')
@@ -52,14 +53,14 @@ def update_profile(request):
         return redirect('user:update_profile')
 
     context = {
-        'title': 'Update Profile',
+        'title': 'Profile Settings',
         'user_profile': user_profile,
         'article_count': Article.objects.filter(user=request.user).count(),
         'review_count': Article.objects.filter(user=request.user, status=STATUS_UNDER_REVIEW).count(),
         'accepted_count': Article.objects.filter(user=request.user, status=STATUS_ACCEPTED).count()
     }
     
-    return render(request, 'user/update_profile.html', context)
+    return render(request, 'user/profile_settings.html', context)
 
 def user_register(request):
     auth_form = CustomUserForm()
@@ -159,19 +160,27 @@ def upload_article(request):
                     return redirect('user:upload-article')
             
             article.save()
-            messages.success(request, "Successfully Uploaded Article.")
-            return redirect('user:article-under-review')
+            messages.success(request, "Manuscript submitted successfully! Your submission is now under review.")
+            return redirect('user:track-submissions')
         else:
             messages.error(request, "Please correct the errors below.")
     else:
         form = PaperUploadForm()
     
     context = {
-        'title': 'Upload Paper',
+        'title': 'Submit Manuscript',
         'form': form,
         'categories': categories
     }
-    return render(request, 'users/paper_upload.html', context)
+    return render(request, 'users/paper_upload_v2.html', context)
+
+def track_submissions(request):
+    articles = Article.objects.filter(user=request.user).order_by('-created_at')
+    context = {
+        'title': 'Track Submissions',
+        'articles': articles
+    }
+    return render(request, 'users/track_submissions.html', context)
 
 def article_under_review(request):
     articles = Article.objects.filter(user=request.user)

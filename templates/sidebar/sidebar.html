@@ -4,10 +4,15 @@
 <!------------------------------------------- Main Sidebar Container------------------------------------------------- -->
 <aside class="main-sidebar sidebar-light elevation-4" style="background-color: white;">
   <!-- Brand Logo -->
-  <a href="{% url 'home' %}" class="brand-link">
-    <div class="user-panel ml-3 pb-1 mr-2 mt-1 d-flex">
-      <img src="https://4m4you.com/wp-content/uploads/2020/06/logo-placeholder.png" style="width:191px;height:65px;" class="img-rectangle">
-      <span class="brand-text font-weight-light ml-1">UNIQUE JMS</span>
+  <a href="{% url 'home' %}" class="brand-link" style="text-decoration: none; display: block; padding: 1.5rem 1rem; border-bottom: 1px solid #e2e8f0;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #1f3c88 0%, #162b63 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.3rem;">
+        U
+      </div>
+      <div>
+        <div style="font-weight: 700; color: #1e293b; font-size: 1.1rem;">UNIQUE JMS</div>
+        <div style="font-size: 0.75rem; color: #64748b;">Journal Management</div>
+      </div>
     </div>
   </a>
 
@@ -46,6 +51,11 @@
         {% elif request.user.groups.all.0.name == 'Reviewer' %}
           <!-- Reviewer Menu -->
           {% include 'sidebar/reviewer_sidebar.html' %}
+
+        <!-----------------------------------Editor Sidebar------------------------------------------>
+        {% elif request.user.groups.all.0.name == 'Editor' %}
+          <!-- Editor Menu -->
+          {% include 'sidebar/editor_sidebar.html' %}
         
         {% else %}
           <!-- Default Menu - No Group Assigned -->

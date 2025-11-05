@@ -5,6 +5,9 @@ from django.urls import path
 app_name = 'admin_app'
 
 urlpatterns = [
+    path('user/deactivate/<int:pk>/', deactivate_user, name='deactivate-user'),
+    path('assign-reviewers/', assign_reviewers_view, name='assign-reviewers'),
+    path('assign-reviewer/<int:article_id>/', assign_reviewer_to_article, name='assign-reviewer-to-article'),
     path('user/index/',normal_user_index,name='normal-user-index'),
     path('reviewer/index/',reviewer_index,name='reviewer-index'),
     path('category/add/',add_category,name='add_category'),

@@ -139,8 +139,44 @@
   {% block custom_css %}{% endblock custom_css %}
   {% block custom_js %}{% endblock custom_js %}
   {% block javascript %}{% endblock %}
-    <!-- Custom sidebar dropdown -->
-    <script src="{% static 'js/sidebar-dropdown.js' %}"></script>
+    <!-- Custom sidebar dropdown - Load after AdminLTE -->
+    <script>
+      // Override AdminLTE treeview to ensure our dropdowns work
+      $(document).ready(function() {
+          // Remove AdminLTE's treeview binding
+          $('[data-widget="treeview"]').off('click');
+          
+          // Our custom dropdown handler
+          $('.nav-sidebar .has-treeview > a').on('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              var $parentItem = $(this).parent('.has-treeview');
+              var $treeview = $parentItem.find('> .nav-treeview');
+              
+              // Close other menus
+              $('.nav-sidebar .has-treeview').not($parentItem).removeClass('menu-open');
+              $('.nav-sidebar .nav-treeview').not($treeview).slideUp(200);
+              
+              // Toggle current menu
+              $parentItem.toggleClass('menu-open');
+              $treeview.slideToggle(200);
+              
+              return false;
+          });
+          
+          // Set active state
+          var currentPath = window.location.pathname;
+          $('.nav-sidebar .nav-link').each(function() {
+              var href = $(this).attr('href');
+              if (href && href !== '#' && currentPath.indexOf(href) >= 0 && href.length > 1) {
+                  $(this).addClass('active');
+                  $(this).closest('.has-treeview').addClass('menu-open');
+                  $(this).closest('.nav-treeview').show();
+              }
+          });
+      });
+    </script>
     <!-- ./wrapper -->
     <div class="row no-print">
       <footer class="main-footer">

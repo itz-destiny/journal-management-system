@@ -1,102 +1,52 @@
 <!-- Dashboard -->
 <li class="nav-item">
   <a href="{% url 'home' %}" class="nav-link">
-    <i class="fas fa-tachometer-alt nav-icon"></i>
+    <i class="fas fa-home nav-icon"></i>
     <p>Dashboard</p>
   </a>
 </li>
 
-<!-- Article Management -->
-{% if perms.user.view_normaluser %}
-<li class="nav-item has-treeview">
-  <a href="#" class="nav-link">
-    <i class="fas fa-newspaper nav-icon"></i>
-    <p>
-      Article Management
-      <i class="fas fa-angle-left right"></i>
-    </p>
+<!-- All Papers -->
+<li class="nav-item">
+  <a href="{% url 'admin_app:user-view' %}" class="nav-link">
+    <i class="fas fa-file-alt nav-icon"></i>
+    <p>All Papers</p>
   </a>
-  <ul class="nav nav-treeview">
-    <li class="nav-item">
-      <a href="{% url 'admin_app:user-view' %}" class="nav-link">
-        <i class="far fa-circle nav-icon"></i>
-        <p>All Articles</p>
-      </a>
-    </li>
-  </ul>
 </li>
-{% endif %}
 
-<!-- User Management -->
-<li class="nav-item has-treeview">
-  <a href="#" class="nav-link">
+<!-- Assign Reviewers -->
+<li class="nav-item">
+  <a href="{% url 'admin_app:assign-reviewers' %}" class="nav-link">
+    <i class="fas fa-user-check nav-icon"></i>
+    <p>Assign Reviewers</p>
+  </a>
+</li>
+
+<!-- Manage Users -->
+<li class="nav-item">
+  <a href="{% url 'admin_app:normal-user-index' %}" class="nav-link">
     <i class="fas fa-users nav-icon"></i>
-    <p>
-      User Management
-      <i class="fas fa-angle-left right"></i>
-    </p>
+    <p>Manage Users</p>
   </a>
-  <ul class="nav nav-treeview">
-    <li class="nav-item">
-      <a href="{% url 'admin_app:reviewer-index' %}" class="nav-link">
-        <i class="far fa-circle nav-icon"></i>
-        <p>Reviewers</p>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="{% url 'admin_app:normal-user-index' %}" class="nav-link">
-        <i class="far fa-circle nav-icon"></i>
-        <p>Authors</p>
-      </a>
-    </li>
-  </ul>
 </li>
 
-<!-- Category Management -->
+<!-- Manage Reviewers -->
+<li class="nav-item">
+  <a href="{% url 'admin_app:reviewer-index' %}" class="nav-link">
+    <i class="fas fa-user-check nav-icon"></i>
+    <p>Manage Reviewers</p>
+  </a>
+</li>
+
+<!-- Categories -->
 {% include "sidebar/includes/category.html" %}
 
-<!-- Permission Management -->
-<li class="nav-item has-treeview">
-  <a href="#" class="nav-link">
-    <i class="fas fa-user-lock nav-icon"></i>
-    <p>
-      Permissions
-      <i class="fas fa-angle-left right"></i>
-    </p>
-  </a>
-  <ul class="nav nav-treeview">
-    <li class="nav-item">
-      <a href="{% url 'role_app:add_role' %}" class="nav-link">
-        <i class="far fa-circle nav-icon"></i>
-        <p>Add Role</p>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="{% url 'role_app:manage_role' %}" class="nav-link">
-        <i class="far fa-circle nav-icon"></i>
-        <p>Manage Roles</p>
-      </a>
-    </li>
-  </ul>
-</li>
-
 <!-- Settings -->
-<li class="nav-item has-treeview">
-  <a href="#" class="nav-link">
+<li class="nav-item">
+  <a href="{% url 'admin_app:notice-index' %}" class="nav-link">
     <i class="fas fa-cog nav-icon"></i>
-    <p>
-      Settings
-      <i class="fas fa-angle-left right"></i>
-    </p>
+    <p>Settings</p>
   </a>
-  <ul class="nav nav-treeview">
-    <li class="nav-item">
-      <a href="{% url 'admin_app:notice-index' %}" class="nav-link">
-        <i class="far fa-circle nav-icon"></i>
-        <p>Notices</p>
-      </a>
-    </li>
-  </ul>
 </li>
 
 <!-- Logout -->

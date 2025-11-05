@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Create default groups for the Journal Management System'
 
     def handle(self, *args, **kwargs):
-        # Create User group
+        # Create User/Author group
         user_group, created = Group.objects.get_or_create(name='User')
         if created:
             self.stdout.write(self.style.SUCCESS('Created User group'))
@@ -19,6 +19,13 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS('Created Reviewer group'))
         else:
             self.stdout.write(self.style.WARNING('Reviewer group already exists'))
+
+        # Create Editor group
+        editor_group, created = Group.objects.get_or_create(name='Editor')
+        if created:
+            self.stdout.write(self.style.SUCCESS('Created Editor group'))
+        else:
+            self.stdout.write(self.style.WARNING('Editor group already exists'))
 
         # Create Admin group
         admin_group, created = Group.objects.get_or_create(name='Admin')
