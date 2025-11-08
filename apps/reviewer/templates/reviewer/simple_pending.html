@@ -148,18 +148,33 @@
                         <span><i class="fas fa-tag"></i> {{ article.category.name|default:"N/A" }}</span>
                     </div>
 
+                    <!-- Comments Section -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label for="comments-{{ article.id }}" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">
+                            <i class="fas fa-comment-alt"></i> Review Comments (Optional)
+                        </label>
+                        <textarea 
+                            id="comments-{{ article.id }}" 
+                            class="form-control" 
+                            rows="3" 
+                            placeholder="Add your review comments here..."
+                            style="border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 0.75rem; resize: vertical; font-size: 0.95rem;"></textarea>
+                    </div>
+
                     <div class="action-buttons">
                         <a href="{% url 'user:article-view' article.id %}" class="btn-simple btn-view">
                             <i class="fas fa-eye"></i> View Paper
                         </a>
-                        <form method="POST" action="{% url 'reviewer:approve-article' article.id %}" style="flex: 1;">
+                        <form method="POST" action="{% url 'reviewer:approve-article' article.id %}" style="flex: 1;" onsubmit="return addComments(this, {{ article.id }})">
                             {% csrf_token %}
+                            <input type="hidden" name="comments" id="approve-comments-{{ article.id }}">
                             <button type="submit" class="btn-simple btn-approve" style="width: 100%;">
                                 <i class="fas fa-check"></i> Approve
                             </button>
                         </form>
-                        <form method="POST" action="{% url 'reviewer:reject-article' article.id %}" style="flex: 1;">
+                        <form method="POST" action="{% url 'reviewer:reject-article' article.id %}" style="flex: 1;" onsubmit="return addComments(this, {{ article.id }})">
                             {% csrf_token %}
+                            <input type="hidden" name="comments" id="reject-comments-{{ article.id }}">
                             <button type="submit" class="btn-simple btn-reject" style="width: 100%;">
                                 <i class="fas fa-times"></i> Reject
                             </button>

@@ -12,3 +12,5 @@ print(f"DJANGO_SECRET_KEY={secret_key}\n")
 
 
 
+
+

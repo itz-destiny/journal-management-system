@@ -134,6 +134,199 @@
         font-size: 2rem;
     }
 
+    .btn-simple {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        border: none;
+        border-radius: 10px;
+        padding: 0.85rem 1rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        color: white;
+        text-decoration: none;
+        width: 100%;
+    }
+
+    .btn-simple:hover {
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+
+    .btn-approve {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        box-shadow: 0 8px 16px rgba(34, 197, 94, 0.25);
+    }
+
+    .btn-approve:hover {
+        background: linear-gradient(135deg, #16a34a, #15803d);
+        box-shadow: 0 12px 20px rgba(22, 163, 74, 0.25);
+    }
+
+    .btn-reject {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        box-shadow: 0 8px 16px rgba(239, 68, 68, 0.25);
+    }
+
+    .btn-reject:hover {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        box-shadow: 0 12px 20px rgba(220, 38, 38, 0.25);
+    }
+
+    .notification-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+
+    .notification-item {
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-start;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1rem;
+        background: #f8fafc;
+    }
+
+    .notification-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .notification-item.success .notification-icon {
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+    }
+
+    .notification-item.info .notification-icon {
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+    }
+
+    .notification-item.warning .notification-icon {
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+    }
+
+    .notification-item.danger .notification-icon {
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+    }
+
+    .notification-content h4 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .notification-content p {
+        margin: 0;
+        color: #475569;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .quick-review-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 1.25rem;
+        background: #f8fafc;
+        margin-bottom: 1.25rem;
+    }
+
+    .quick-review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .quick-review-title {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .quick-review-link {
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: #1d4ed8;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .quick-review-link:hover {
+        color: #2563eb;
+        text-decoration: underline;
+    }
+
+    .quick-review-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .quick-review-card textarea {
+        width: 100%;
+        border-radius: 10px;
+        border: 1.5px solid #cbd5e1;
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        resize: vertical;
+        min-height: 120px;
+        margin-bottom: 1rem;
+        transition: border 0.2s ease;
+    }
+
+    .quick-review-card textarea:focus {
+        border-color: #2563eb;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .quick-review-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .quick-review-actions form {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .quick-review-actions .btn-simple {
+        width: 100%;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        border-radius: 12px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 0.95rem;
+    }
+
     @media (max-width: 768px) {
         .dashboard-header h1 {
             font-size: 1.5rem;
@@ -141,6 +334,20 @@
 
         .stat-card {
             margin-bottom: 1rem;
+        }
+
+        .quick-review-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .quick-review-actions form {
+            width: 100%;
+        }
+
+        .quick-review-header {
+            flex-direction: column;
+            align-items: flex-start;
         }
     }
 </style>
@@ -238,6 +445,76 @@
                         </div>
                     </div>
                 </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="chart-card">
+                    <h3 class="chart-title"><i class="fas fa-bell"></i> Notifications</h3>
+                    {% if notifications %}
+                        <ul class="notification-list">
+                            {% for note in notifications %}
+                            <li class="notification-item {{ note.level }}">
+                                <div class="notification-icon">
+                                    <i class="fas {{ note.icon }}"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <h4>{{ note.title }}</h4>
+                                    <p>{{ note.message }}</p>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle"></i> You're all caught up! No notifications right now.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="chart-card">
+                    <h3 class="chart-title"><i class="fas fa-pen"></i> Quick Review Notes</h3>
+                    {% if recent_articles %}
+                        {% for article in recent_articles %}
+                        <div class="quick-review-card">
+                            <div class="quick-review-header">
+                                <h4 class="quick-review-title">{{ article.title }}</h4>
+                                <a href="{% url 'user:article-view' article.id %}" class="quick-review-link" target="_blank" rel="noopener">
+                                    <i class="fas fa-external-link-alt"></i> View manuscript
+                                </a>
+                            </div>
+                            <div class="quick-review-meta">
+                                <span><i class="fas fa-user"></i> {{ article.user.normaluser.full_name|default:article.user.username }}</span>
+                                <span><i class="fas fa-calendar-day"></i> {{ article.created_at|date:"M d, Y" }}</span>
+                                <span><i class="fas fa-tag"></i> {{ article.category.name|default:"No category" }}</span>
+                            </div>
+                            <textarea id="comments-{{ article.id }}" placeholder="Add quick feedback or notes before taking action..."></textarea>
+                            <div class="quick-review-actions">
+                                <form method="POST" action="{% url 'reviewer:approve-article' article.id %}" onsubmit="return addComments(this, {{ article.id }})">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="comments" id="approve-comments-{{ article.id }}">
+                                    <button type="submit" class="btn-simple btn-approve">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                </form>
+                                <form method="POST" action="{% url 'reviewer:reject-article' article.id %}" onsubmit="return addComments(this, {{ article.id }})">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="comments" id="reject-comments-{{ article.id }}">
+                                    <button type="submit" class="btn-simple btn-reject">
+                                        <i class="fas fa-times"></i> Reject
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-smile-beam"></i> No manuscripts waiting for review. Enjoy the break!
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
 

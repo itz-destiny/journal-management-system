@@ -240,6 +240,136 @@
     box-sizing: border-box !important;
   }
 
+  /* Global notification alerts */
+  .global-alert-wrapper {
+    width: 100%;
+    margin-bottom: 1rem;
+    max-width: 100% !important;
+  }
+
+  .global-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.95rem 1.25rem;
+    border-radius: 12px;
+    border-left: 5px solid;
+    background: #ffffff;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .global-alert::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+  }
+
+  .global-alert-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .global-alert-body {
+    flex: 1;
+  }
+
+  .global-alert-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    color: #0f172a;
+  }
+
+  .global-alert-message {
+    margin: 0;
+    color: #334155;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .global-alert button.close-alert {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    font-size: 1rem;
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .global-alert-success {
+    border-color: #16a34a;
+  }
+
+  .global-alert-success .global-alert-icon {
+    background: rgba(22, 163, 74, 0.15);
+    color: #15803d;
+  }
+
+  .global-alert-success::after {
+    background: #16a34a;
+  }
+
+  .global-alert-info,
+  .global-alert-debug {
+    border-color: #2563eb;
+  }
+
+  .global-alert-info .global-alert-icon,
+  .global-alert-debug .global-alert-icon {
+    background: rgba(37, 99, 235, 0.15);
+    color: #1d4ed8;
+  }
+
+  .global-alert-info::after,
+  .global-alert-debug::after {
+    background: #2563eb;
+  }
+
+  .global-alert-warning {
+    border-color: #f59e0b;
+  }
+
+  .global-alert-warning .global-alert-icon {
+    background: rgba(245, 158, 11, 0.15);
+    color: #b45309;
+  }
+
+  .global-alert-warning::after {
+    background: #f59e0b;
+  }
+
+  .global-alert-error {
+    border-color: #dc2626;
+  }
+
+  .global-alert-error .global-alert-icon {
+    background: rgba(220, 38, 38, 0.15);
+    color: #b91c1c;
+  }
+
+  .global-alert-error::after {
+    background: #dc2626;
+  }
+
+  .global-alert-hide {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
   /* Any div inside content must not overflow */
   .content > *,
   .content-wrapper > *,
@@ -371,6 +501,49 @@
       </div>
       <!-- /.content-header -->
 
+      {% if messages %}
+      <div class="container-fluid global-alert-wrapper">
+        {% for message in messages %}
+        {% with message.tags|default:"" as tag_list %}
+        <div class="global-alert {% if 'success' in tag_list %}global-alert-success{% elif 'warning' in tag_list %}global-alert-warning{% elif 'error' in tag_list %}global-alert-error{% elif 'debug' in tag_list %}global-alert-debug{% else %}global-alert-info{% endif %}" data-alert>
+          <div class="global-alert-icon">
+            {% if 'success' in tag_list %}
+            <i class="fas fa-check-circle"></i>
+            {% elif 'warning' in tag_list %}
+            <i class="fas fa-exclamation-triangle"></i>
+            {% elif 'error' in tag_list %}
+            <i class="fas fa-times-circle"></i>
+            {% elif 'debug' in tag_list %}
+            <i class="fas fa-bug"></i>
+            {% else %}
+            <i class="fas fa-info-circle"></i>
+            {% endif %}
+          </div>
+          <div class="global-alert-body">
+            <div class="global-alert-title">
+              {% if 'success' in tag_list %}
+                Success
+              {% elif 'warning' in tag_list %}
+                Warning
+              {% elif 'error' in tag_list %}
+                Error
+              {% elif 'debug' in tag_list %}
+                Debug
+              {% else %}
+                Notification
+              {% endif %}
+            </div>
+            <p class="global-alert-message">{{ message }}</p>
+          </div>
+          <button type="button" class="close-alert" aria-label="Dismiss notification" data-alert-close>
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        {% endwith %}
+        {% endfor %}
+      </div>
+      {% endif %}
+
       {% block main_content %}{% endblock main_content %}
       {% block content %}{% endblock %}
     </div>
@@ -396,6 +569,47 @@
   {% block custom_css %}{% endblock custom_css %}
   {% block custom_js %}{% endblock custom_js %}
   {% block javascript %}{% endblock %}
+
+    <script>
+      function addComments(form, articleId, textareaPrefix) {
+        var prefix = textareaPrefix || 'comments';
+        var textarea = document.getElementById(prefix + '-' + articleId);
+        if (textarea) {
+          var hiddenField = form.querySelector('input[name="comments"]');
+          if (hiddenField) {
+            hiddenField.value = textarea.value.trim();
+          }
+        }
+        return true;
+      }
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var alerts = document.querySelectorAll('[data-alert]');
+        alerts.forEach(function (alertEl) {
+          var closeButton = alertEl.querySelector('[data-alert-close]');
+          if (closeButton) {
+            closeButton.addEventListener('click', function () {
+              alertEl.classList.add('global-alert-hide');
+              setTimeout(function () {
+                alertEl.remove();
+              }, 200);
+            });
+          }
+          setTimeout(function () {
+            if (alertEl && alertEl.parentNode) {
+              alertEl.classList.add('global-alert-hide');
+              setTimeout(function () {
+                if (alertEl && alertEl.parentNode) {
+                  alertEl.remove();
+                }
+              }, 200);
+            }
+          }, 6000);
+        });
+      });
+    </script>
     
     <!-- Auto-wrap tables for mobile responsiveness -->
     <script>

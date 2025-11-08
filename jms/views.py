@@ -120,13 +120,62 @@ def dashboard(request):
         today_rejected_article_by_reviewer = Article.objects.filter(status=STATUS_REJECTED, updated_at__gte=today_start).filter(updated_at__lte=today_end)
         today_publish_article_to_admin = Article.objects.filter(status=STATUS_REVIEWER_PUBLISHED, updated_at__gte=today_start).filter(updated_at__lte=today_end)
         article_under_review = Article.objects.filter(status=STATUS_UNDER_REVIEW)
+
+        accepted_count = today_accepted_article_by_reviewer.count()
+        rejected_count = today_rejected_article_by_reviewer.count()
+        published_count = today_publish_article_to_admin.count()
+        pending_count = article_under_review.count()
+
+        recent_articles = article_under_review.order_by('-created_at')[:5]
+
+        notifications = []
+        if pending_count:
+            notifications.append({
+                'level': 'warning',
+                'icon': 'fa-hourglass-half',
+                'title': 'Pending Reviews',
+                'message': f'You have {pending_count} manuscript{"s" if pending_count != 1 else ""} waiting for review.'
+            })
+        else:
+            notifications.append({
+                'level': 'info',
+                'icon': 'fa-check-circle',
+                'title': 'All Clear',
+                'message': 'No manuscripts are waiting for review right now.'
+            })
+
+        if accepted_count:
+            notifications.append({
+                'level': 'success',
+                'icon': 'fa-check',
+                'title': 'Accepted Today',
+                'message': f'{accepted_count} manuscript{"s" if accepted_count != 1 else ""} accepted today.'
+            })
+
+        if rejected_count:
+            notifications.append({
+                'level': 'danger',
+                'icon': 'fa-times',
+                'title': 'Rejected Today',
+                'message': f'{rejected_count} manuscript{"s" if rejected_count != 1 else ""} rejected today.'
+            })
+
+        if published_count:
+            notifications.append({
+                'level': 'info',
+                'icon': 'fa-paper-plane',
+                'title': 'Forwarded to Admin',
+                'message': f'{published_count} manuscript{"s" if published_count != 1 else ""} sent to the admin today.'
+            })
         
         context = {
             'title': 'Reviewer Dashboard',
-            'today_accepted_article_by_reviewer_count': today_accepted_article_by_reviewer.count(),
-            'today_rejected_article_by_reviewer_count': today_rejected_article_by_reviewer.count(),
-            'today_publish_article_to_admin_count': today_publish_article_to_admin.count(),
-            'article_under_review_count': article_under_review.count(),
+            'today_accepted_article_by_reviewer_count': accepted_count,
+            'today_rejected_article_by_reviewer_count': rejected_count,
+            'today_publish_article_to_admin_count': published_count,
+            'article_under_review_count': pending_count,
+            'recent_articles': recent_articles,
+            'notifications': notifications,
         }
         return render(request, 'reviewer_dashboard.html', context)
     

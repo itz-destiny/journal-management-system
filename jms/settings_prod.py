@@ -29,26 +29,35 @@ STATIC_URL = '/static/'
 # Use basic WhiteNoise without manifest to avoid CSS processing issues
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
-# Media files - Using Cloudinary for persistent storage on Render
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
-# Cloudinary configuration (set these as environment variables on Render)
-cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', ''),
-    api_key=os.environ.get('CLOUDINARY_API_KEY', ''),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET', ''),
-)
-
-# Add cloudinary_storage to installed apps
-INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
-
-# Use Cloudinary for media storage
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
+# Media files configuration
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Use Cloudinary ONLY if credentials are provided
+# Otherwise, use default filesystem storage (files will be temporary on Render)
+CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME', '')
+CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY', '')
+CLOUDINARY_API_SECRET = os.environ.get('CLOUDINARY_API_SECRET', '')
+
+if CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET:
+    # Cloudinary is configured - use cloud storage
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
+    
+    cloudinary.config(
+        cloud_name=CLOUDINARY_CLOUD_NAME,
+        api_key=CLOUDINARY_API_KEY,
+        api_secret=CLOUDINARY_API_SECRET,
+    )
+    
+    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    print("✅ Cloudinary storage enabled")
+else:
+    # Cloudinary not configured - use local filesystem (temporary on Render)
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    print("⚠️  Using local file storage - files will be temporary on Render!")
 
 # Security settings
 SECURE_SSL_REDIRECT = False  # Disabled temporarily for debugging

@@ -30,11 +30,14 @@ def approve_article(request, pk):
         article.status = STATUS_ACCEPTED
         article.save()
         
+        comments = request.POST.get('comments', '').strip()
+        feedback_text = comments if comments else 'Approved by reviewer'
+
         # Create feedback
         Feedback.objects.create(
             article=article,
             status='Accepted',
-            feedback='Approved by reviewer',
+            feedback=feedback_text,
             user=article.user.normaluser if hasattr(article.user, 'normaluser') else None
         )
         
@@ -50,11 +53,14 @@ def reject_article(request, pk):
         article.status = STATUS_REJECTED
         article.save()
         
+        comments = request.POST.get('comments', '').strip()
+        feedback_text = comments if comments else 'Rejected by reviewer'
+
         # Create feedback
         Feedback.objects.create(
             article=article,
             status='Rejected',
-            feedback='Rejected by reviewer',
+            feedback=feedback_text,
             user=article.user.normaluser if hasattr(article.user, 'normaluser') else None
         )
         
